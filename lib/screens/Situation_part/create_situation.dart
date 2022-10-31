@@ -881,6 +881,7 @@ class _CreateSituationState extends State<CreateSituation> {
                             onChanged: (noo) {
                               setState(() {
                                 preact1 = noo.toString();
+
                                 gvariablesController.preacc.isEmpty
                                     ? gvariablesController.preacc.add(preact1)
                                     : gvariablesController.preacc[0] = preact1;
@@ -1042,8 +1043,9 @@ class _CreateSituationState extends State<CreateSituation> {
                                 preact2 = noo.toString();
                                 preact2 == act
                                     ? gvariablesController.premonn.add("")
-                                    : gvariablesController.premonn.removeWhere(
-                                        (value) => [""].contains(value));
+                                    // : gvariablesController.premonn.removeWhere(
+                                    //     (value) => [""].contains(value));
+                                    : null;
                                 preact2 != act
                                     ? gvariablesController.globalOne
                                         .add(prejour2)
@@ -1298,8 +1300,9 @@ class _CreateSituationState extends State<CreateSituation> {
                                   fact1 = noo.toString();
                                   fact1 == "Check"
                                       ? gvariablesController.fmonn.add("")
-                                      : gvariablesController.fmonn.removeWhere(
-                                          (value) => [""].contains(value));
+                                      // : gvariablesController.fmonn.removeWhere(
+                                      //     (value) => [""].contains(value));
+                                      : null;
                                   gvariablesController.facc.isEmpty
                                       ? gvariablesController.facc.add(fact1)
                                       : gvariablesController.facc[0] = fact1;
@@ -1409,8 +1412,9 @@ class _CreateSituationState extends State<CreateSituation> {
                                   fact2 = noo.toString();
                                   fact2 == act || fact2 == "Check"
                                       ? gvariablesController.fmonn.add("")
-                                      : gvariablesController.fmonn.removeWhere(
-                                          (value) => [""].contains(value));
+                                      // : gvariablesController.fmonn.removeWhere(
+                                      //     (value) => [""].contains(value));
+                                      : null;
                                   gvariablesController.facc.length < 2
                                       ? gvariablesController.facc.add(fact2)
                                       : gvariablesController.facc[1] = fact2;
@@ -1663,8 +1667,9 @@ class _CreateSituationState extends State<CreateSituation> {
                                   tact1 = noo.toString();
                                   tact1 == "Check"
                                       ? gvariablesController.tmonn.add("")
-                                      : gvariablesController.tmonn.removeWhere(
-                                          (value) => [""].contains(value));
+                                      // : gvariablesController.tmonn.removeWhere(
+                                      //     (value) => [""].contains(value));
+                                      : null;
                                   gvariablesController.tacc.isEmpty
                                       ? gvariablesController.tacc.add(tact1)
                                       : gvariablesController.tacc[0] = tact1;
@@ -1774,8 +1779,9 @@ class _CreateSituationState extends State<CreateSituation> {
                                   tact2 = noo.toString();
                                   tact2 == act || tact2 == "Check"
                                       ? gvariablesController.tmonn.add("")
-                                      : gvariablesController.tmonn.removeWhere(
-                                          (value) => [""].contains(value));
+                                      // : gvariablesController.tmonn.removeWhere(
+                                      //     (value) => [""].contains(value));
+                                      : null;
                                   gvariablesController.tacc.length < 2
                                       ? gvariablesController.tacc.add(tact2)
                                       : gvariablesController.tacc[1] = tact2;
@@ -2030,8 +2036,9 @@ class _CreateSituationState extends State<CreateSituation> {
                                   ract1 = noo.toString();
                                   ract1 == "Check"
                                       ? gvariablesController.rmonn.add("")
-                                      : gvariablesController.rmonn.removeWhere(
-                                          (value) => [""].contains(value));
+                                      // : gvariablesController.rmonn.removeWhere(
+                                      //     (value) => [""].contains(value));
+                                      : null;
                                   gvariablesController.racc.isEmpty
                                       ? gvariablesController.racc.add(ract1)
                                       : gvariablesController.racc[0] = ract1;
@@ -2141,8 +2148,9 @@ class _CreateSituationState extends State<CreateSituation> {
                                   ract2 = noo.toString();
                                   ract2 == act || ract2 == "Check"
                                       ? gvariablesController.rmonn.add("")
-                                      : gvariablesController.rmonn.removeWhere(
-                                          (value) => [""].contains(value));
+                                      // : gvariablesController.rmonn.removeWhere(
+                                      //     (value) => [""].contains(value));
+                                      : null;
                                   gvariablesController.racc.length < 2
                                       ? gvariablesController.racc.add(ract2)
                                       : gvariablesController.racc[1] = ract2;

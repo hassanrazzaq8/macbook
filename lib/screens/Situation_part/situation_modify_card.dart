@@ -1,4 +1,5 @@
 import 'package:card_app/controllers/profile_controller.dart';
+import 'package:card_app/screens/Situation_part/edit_situation.dart';
 import 'package:card_app/screens/Situation_part/widgets/card_texts.dart';
 import 'package:card_app/widgets/post_like.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -70,98 +71,98 @@ class _SituationModifyCardState extends State<SituationModifyCard> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        // widget.isUser
-                        //     ? Align(
-                        //         alignment: Alignment.topRight,
-                        //         child: IconButton(
-                        //           onPressed: () {
-                        //             showModalBottomSheet(
-                        //               shape: RoundedRectangleBorder(
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(10.0)),
-                        //               context: context,
-                        //               builder: (context) {
-                        //                 return StatefulBuilder(
-                        //                   builder: (context, setState) {
-                        //                     return Padding(
-                        //                       padding:
-                        //                           const EdgeInsets.symmetric(
-                        //                               horizontal: 18.0,
-                        //                               vertical: 18.0),
-                        //                       child: SizedBox(
-                        //                         height: MediaQuery.of(context)
-                        //                                 .size
-                        //                                 .height *
-                        //                             .20,
-                        //                         // color: Colors.amber,
-                        //                         // decoration: const BoxDecoration(
-                        //                         //     borderRadius: BorderRadius.only(
-                        //                         //   topLeft: Radius.circular(20),
-                        //                         //   topRight: Radius.circular(20),
-                        //                         // )),
-                        //                         child: Column(
-                        //                           children: [
-                        //                             Row(
-                        //                               children: [
-                        //                                 const Icon(Icons.edit),
-                        //                                 const SizedBox(
-                        //                                     width: 5),
-                        //                                 TextButton(
-                        //                                   onPressed: () {
-                        //                                     // Navigator.pop(
-                        //                                     //     context);
-                        //                                     // Get.to(
-                        //                                     //     EditSituation(
-                        //                                     //         snap:
-                        //                                     //             snap));
-                        //                                   },
-                        //                                   child: const Text(
-                        //                                     "Modifier la situation",
-                        //                                     style: TextStyle(
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                   ),
-                        //                                 ),
-                        //                               ],
-                        //                             ),
-                        //                             const SizedBox(height: 10),
-                        //                             Row(
-                        //                               children: [
-                        //                                 const Icon(
-                        //                                     Icons.delete),
-                        //                                 const SizedBox(
-                        //                                     width: 5),
-                        //                                 TextButton(
-                        //                                   onPressed: () {
-                        //                                     Navigator.pop(
-                        //                                         context);
-                        //                                     alert(snapp[
-                        //                                         "postId"]);
-                        //                                   },
-                        //                                   child: const Text(
-                        //                                     "Eliminate",
-                        //                                     style: TextStyle(
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                   ),
-                        //                                 ),
-                        //                               ],
-                        //                             ),
-                        //                           ],
-                        //                         ),
-                        //                       ),
-                        //                     );
-                        //                   },
-                        //                 );
-                        //               },
-                        //             );
-                        //           },
-                        //           icon: Image.asset("assets/icons/dots.png"),
-                        //         ),
-                        //       )
-                        //     : const SizedBox.shrink(),
+                        widget.isUser
+                            ? Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)),
+                                      context: context,
+                                      builder: (context) {
+                                        return StatefulBuilder(
+                                          builder: (context, setState) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 18.0,
+                                                      vertical: 18.0),
+                                              child: SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .20,
+                                                // color: Colors.amber,
+                                                // decoration: const BoxDecoration(
+                                                //     borderRadius: BorderRadius.only(
+                                                //   topLeft: Radius.circular(20),
+                                                //   topRight: Radius.circular(20),
+                                                // )),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        const Icon(Icons.edit),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            Get.to(
+                                                                EditSituation(
+                                                                    snap:
+                                                                        snapp));
+                                                          },
+                                                          child: const Text(
+                                                            "Modifier la situation",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    Row(
+                                                      children: [
+                                                        const Icon(
+                                                            Icons.delete),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            alert(snapp[
+                                                                "postId"]);
+                                                          },
+                                                          child: const Text(
+                                                            "Eliminate",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: Image.asset("assets/icons/dots.png"),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
                       ],
                     ),
                     SizedBox(height: h * .05),

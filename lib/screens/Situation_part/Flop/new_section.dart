@@ -149,17 +149,20 @@ class _NewSectionState extends State<NewSection> {
                             widget.turn == "2"
                                 ? action == "Fold" || action == "Check"
                                     ? gc.fmonn.add("")
-                                    : gc.fmonn.removeWhere(
-                                        (value) => [""].contains(value))
+                                    // : gc.fmonn.removeWhere(
+                                    //     (value) => [""].contains(value))
+                                    : null
                                 : widget.turn == "3"
                                     ? action == "Fold" || action == "Check"
                                         ? gc.tmonn.add("")
-                                        : gc.tmonn.removeWhere(
-                                            (value) => [""].contains(value))
+                                        : null
+                                    // : gc.tmonn.removeWhere(
+                                    //     (value) => [""].contains(value))
                                     : action == "Fold" || action == "Check"
                                         ? gc.rmonn.add("")
-                                        : gc.rmonn.removeWhere(
-                                            (value) => [""].contains(value));
+                                        : null;
+                            // : gc.rmonn.removeWhere(
+                            //     (value) => [""].contains(value));
                             int i = widget.index + 2;
                             widget.turn == "2"
                                 ? gc.facc.length <= i
@@ -366,10 +369,9 @@ class _NewSectionState extends State<NewSection> {
                       onChanged: (noo) {
                         setState(() {
                           action = noo.toString();
-                          action == "Fold"
-                              ? gc.fmonn.add("")
-                              : gc.fmonn
-                                  .removeWhere((value) => [""].contains(value));
+                          action == "Fold" ? gc.fmonn.add("") : null;
+                          // : gc.fmonn
+                          //     .removeWhere((value) => [""].contains(value));
                           int i = widget.index + 2;
                           gc.preacc.length <= i
                               ? gc.preacc.add(action)

@@ -1,3 +1,4 @@
+import 'package:card_app/screens/Situation_part/Flop/edit_new_section.dart';
 import 'package:card_app/screens/Situation_part/resources/store_to_firestor.dart';
 import 'package:card_app/screens/Situation_part/widgets/alertdialoge.dart';
 import 'package:card_app/widgets/utills.dart';
@@ -88,30 +89,10 @@ class _EditSituationState extends State<EditSituation> {
     String bbb = bb.text.isEmpty ? data["sb"] : bb.text;
     String stack =
         stackController.text.isEmpty ? data["stack"] : stackController.text;
-    String pj1 = prejour1 == null ? data["Preflop.preJoueur1"] : prejour1!;
-    String pj2 = prejour2 ?? data["Preflop.preJoueur2"];
-    String fj1 = fjour1 ?? data["Flop.flopJoueur1"];
-    String fj2 = fjour2 ?? data["Flop.flopJoueur2"];
-    String tj1 = tjour1 ?? data["Turn.turnJoueur1"];
-    String tj2 = tjour2 ?? data["Turn.turnJoueur2"];
-    String rj1 = rjour1 ?? data["River.riverJoueur1"];
-    String rj2 = rjour2 ?? data["River.riverJoueur2"];
-    String pac1 = preact1 ?? data["Preflop.preactions1"];
-    String pac2 = preact1 ?? data["Preflop.preactions2"];
-    String fac1 = fact1 ?? data["Flop.flopactions1"];
-    String fac2 = fact2 ?? data["Flop.flopactions2"];
-    String tac1 = tact1 ?? data["Turn.turnactions1"];
-    String tac2 = tact2 ?? data["Turn.turnactions2"];
-    String rac1 = ract1 ?? data["River.riveractions1"];
-    String rac2 = ract2 ?? data["River.riveractions2"];
-    String pm1 = premont1 ?? data["Preflop.premontain1"];
-    String pm2 = premont2 ?? data["Preflop.premontain2"];
-    String fm1 = fmont1 ?? data["Flop.flopmontain1"];
-    String fm2 = fmont2 ?? data["Flop.flopmontain2"];
-    String tm1 = tmont1 ?? data["Turn.turnmontain1"];
-    String tm2 = tmont2 ?? data["Turn.turnmontain2"];
-    String rm1 = rmont1 ?? data["River.rivermontain1"];
-    String rm2 = rmont2 ?? data["River.rivermontain2"];
+    List preCarts = fn.isEmpty ? data["SimpleCardValue"] : fn;
+    List fCarts = fn.isEmpty ? data["FlopCardValue"] : fn;
+    List tCarts = fn.isEmpty ? data["TurnCardValue"] : fn;
+    List rCarts = fn.isEmpty ? data["RiverCardValue"] : fn;
     setState(() {
       isUpdating = true;
     });
@@ -127,30 +108,10 @@ class _EditSituationState extends State<EditSituation> {
       "sb": ssb,
       "bb": bbb,
       "stack": stack,
-      "Preflop.preJoueur1": pj1,
-      "Preflop.preJoueur2": pj2,
-      "Flop.flopJoueur1": fj1,
-      "Flop.flopJoueur2": fj2,
-      "Turn.turnJoueur1": tj1,
-      "Turn.turnJoueur2": tj2,
-      "River.riverJoueur1": rj1,
-      "River.riverJoueur2": rj2,
-      "Preflop.preactions1": pac1,
-      "Preflop.preactions2": pac2,
-      "Flop.flopactions1": fac1,
-      "Flop.flopactions2": fac2,
-      "Turn.turnactions1": tac1,
-      "Turn.turnactions2": tac2,
-      "River.riveractions1": rac1,
-      "River.riveractions2": rac2,
-      "Preflop.premontain1": pm1,
-      "Preflop.premontain2": pm2,
-      "Flop.flopmontain1": fm1,
-      "Flop.flopmontain2": fm2,
-      "Turn.turnmontain1": tm1,
-      "Turn.turnmontain2": tm2,
-      "River.rivermontain1": rm1,
-      "River.rivermontain2": rm2,
+      "SimpleCardValue": preCarts,
+      "FlopCardValue": fCarts,
+      "TurnCardValue": tCarts,
+      "RiverCardValue": rCarts,
     });
     setState(() {
       isUpdating = false;
@@ -164,6 +125,12 @@ class _EditSituationState extends State<EditSituation> {
     sb.dispose();
     bb.dispose();
     note.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    no = widget.snap["noOfPlayers"];
   }
 
   @override
@@ -688,7 +655,7 @@ class _EditSituationState extends State<EditSituation> {
                                 visible: false,
                                 child: Icon(Icons.arrow_downward)),
                             hint: Text(
-                              widget.snap["Preflop.preJoueur1"],
+                              widget.snap["prejoueur"][0],
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
@@ -781,11 +748,11 @@ class _EditSituationState extends State<EditSituation> {
                                 visible: false,
                                 child: Icon(Icons.arrow_downward)),
                             hint: Text(
-                              widget.snap["Preflop.preactions1"],
+                              widget.snap["preaction"][0],
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
-                            items: <String>["RAISE", "CHECK", "ALL-in"]
+                            items: <String>["Raise", "Check", "All-in"]
                                 .map((value) {
                               return DropdownMenuItem(
                                 value: value,
@@ -807,7 +774,7 @@ class _EditSituationState extends State<EditSituation> {
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
-                          hintText: widget.snap["Preflop.premontain1"],
+                          hintText: widget.snap["premontant"][0],
                           hintStyle: const TextStyle(color: Colors.black),
                           focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
@@ -839,7 +806,7 @@ class _EditSituationState extends State<EditSituation> {
                                 visible: false,
                                 child: Icon(Icons.arrow_downward)),
                             hint: Text(
-                              widget.snap["Preflop.preJoueur2"],
+                              widget.snap["prejoueur"][1],
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
@@ -931,11 +898,11 @@ class _EditSituationState extends State<EditSituation> {
                                 visible: false,
                                 child: Icon(Icons.arrow_downward)),
                             hint: Text(
-                              widget.snap["Preflop.preactions2"],
+                              widget.snap["preaction"][1],
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
-                            items: <String>["CHECK", "BET", "RAISE", "FOLD"]
+                            items: <String>["Check", "Bet", "Raise", "Fold"]
                                 .map((value) {
                               return DropdownMenuItem(
                                 value: value,
@@ -958,32 +925,47 @@ class _EditSituationState extends State<EditSituation> {
                       ),
                     ),
                     const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["Preflop.premontain2"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                    widget.snap["preaction"][1] == "Bet" ||
+                            widget.snap["preaction"][1] == "Raise" ||
+                            widget.snap["preaction"][1] == "Call" ||
+                            widget.snap["preaction"][1] == "All-in"
+                        ? SizedBox(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                hintText: widget.snap["premontant"][1],
+                                hintStyle: const TextStyle(color: Colors.black),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  premont2 = value;
+                                });
+                              },
                             ),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            premont2 = value;
-                          });
-                        },
-                      ),
-                    ),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              EditNewSection(
+                count: no!,
+                turn: "1",
+                jou: const [],
+                index: 1,
+                snap: widget.snap,
               ),
               const SizedBox(
                 height: 10,
@@ -1119,205 +1101,229 @@ class _EditSituationState extends State<EditSituation> {
               const SizedBox(
                 height: 10,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: fjour1,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["Flop.flopJoueur1"],
-                              textAlign: TextAlign.center,
+              widget.snap["flopjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
                             ),
-                            style: const TextStyle(color: Colors.black),
-                            items: par.map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                fjour1 = noo.toString();
-                                // print
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: fact1,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["Flop.flopactions1"],
-                              textAlign: TextAlign.center,
-                            ),
-                            style: const TextStyle(color: Colors.black),
-                            items: <String>["RAISE", "CHECK", "ALL-in"]
-                                .map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                fact1 = noo.toString();
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["Flop.flopmontain1"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: fjour1,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["flopjoueur"][0],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  style: const TextStyle(color: Colors.black),
+                                  items: par.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      fjour1 = noo.toString();
+                                      // print
+                                    });
+                                  }),
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            fmont1 = value;
-                          });
-                        },
-                      ),
-                    ),
-                    const Text(
-                      " , ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: fjour2,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["Flop.flopJoueur2"],
-                              textAlign: TextAlign.center,
+                          const SizedBox(width: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
                             ),
-                            style: const TextStyle(color: Colors.black),
-                            items: par.map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                fjour2 = noo.toString();
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: fact2,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["Turn.turnactions2"],
-                              textAlign: TextAlign.center,
-                            ),
-                            style: const TextStyle(color: Colors.black),
-                            items: <String>["CHECK", "BET", "RAISE", "FOLD"]
-                                .map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                fact2 = noo.toString();
-                                parf = List.from(par);
-                                fact2 == act ? parf.remove(fjour2) : null;
-                                parf.isEmpty
-                                    ? customAlertDialoge(
-                                        context,
-                                        "Note",
-                                        'Il ne reste plus aucun joueur pour jouer. Ainsi, vous pouvez mettre fin à la situation',
-                                        "ok",
-                                      )
-                                    : null;
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["Flop.flopmontain1"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: fact1,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["flopaction"][0],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  style: const TextStyle(color: Colors.black),
+                                  items: <String>["Check", "Bet", "All-in"]
+                                      .map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      fact1 = noo.toString();
+                                    });
+                                  }),
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            fmont2 = value;
-                          });
-                        },
+                          const SizedBox(width: 5),
+                          widget.snap["flopaction"][0] == "Bet" ||
+                                  widget.snap["flopaction"][0] == "Raise" ||
+                                  widget.snap["flopaction"][0] == "Call" ||
+                                  widget.snap["flopaction"][0] == "All-in"
+                              ? SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      hintText: widget.snap["flopmontant"][0],
+                                      hintStyle:
+                                          const TextStyle(color: Colors.black),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        fmont1 = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          const Text(
+                            " , ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: fjour2,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["flopjoueur"][1],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  style: const TextStyle(color: Colors.black),
+                                  items: par.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      fjour2 = noo.toString();
+                                    });
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: fact2,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["flopaction"][1],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  style: const TextStyle(color: Colors.black),
+                                  items: <String>[
+                                    "Check",
+                                    "Bet",
+                                    "Raise",
+                                    "Call",
+                                    "Fold",
+                                    "All-in"
+                                  ].map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      fact2 = noo.toString();
+                                      parf = List.from(par);
+                                      fact2 == act ? parf.remove(fjour2) : null;
+                                    });
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          widget.snap["flopaction"][1] == "Bet" ||
+                                  widget.snap["flopaction"][1] == "Raise" ||
+                                  widget.snap["flopaction"][1] == "Call" ||
+                                  widget.snap["flopaction"][1] == "All-in"
+                              ? SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      hintText: widget.snap["flopmontant"][1],
+                                      hintStyle:
+                                          const TextStyle(color: Colors.black),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        fmont2 = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
+              const SizedBox(height: 5),
+              widget.snap["flopjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : EditNewSection(
+                      count: no!,
+                      turn: "2",
+                      jou: const [],
+                      index: 1,
+                      snap: widget.snap,
+                    ),
               const SizedBox(height: 5),
               SizedBox(
                 child: ListView.builder(
@@ -1447,205 +1453,229 @@ class _EditSituationState extends State<EditSituation> {
                 ),
               ),
               showCarts3 ? show(sample2, 1, "3") : const SizedBox.shrink(),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: tjour1,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["Turn.turnJoueur1"],
-                              textAlign: TextAlign.center,
+              widget.snap["turnjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
                             ),
-                            style: const TextStyle(color: Colors.black),
-                            items: parf.map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                tjour1 = noo.toString();
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: tact1,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["Turn.turnactions1"],
-                              textAlign: TextAlign.center,
-                            ),
-                            style: const TextStyle(color: Colors.black),
-                            items: <String>["RAISE", "CHECK", "ALL-in"]
-                                .map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                tact1 = noo.toString();
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["Turn.turnmontain1"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: tjour1,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["turnjoueur"][0],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  style: const TextStyle(color: Colors.black),
+                                  items: parf.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      tjour1 = noo.toString();
+                                    });
+                                  }),
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            tmont1 = value;
-                          });
-                        },
-                      ),
-                    ),
-                    const Text(
-                      " , ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: tjour2,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["Turn.turnJoueur2"],
-                              textAlign: TextAlign.center,
+                          const SizedBox(width: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
                             ),
-                            style: const TextStyle(color: Colors.black),
-                            items: parf.map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                tjour2 = noo.toString();
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: tact2,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["Turn.turnactions2"],
-                              textAlign: TextAlign.center,
-                            ),
-                            style: const TextStyle(color: Colors.black),
-                            items: <String>["CHECK", "BET", "RAISE", "FOLD"]
-                                .map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                tact2 = noo.toString();
-                                part = List.from(parf);
-                                tact2 == act ? part.remove(tjour2) : null;
-                                part.isEmpty
-                                    ? customAlertDialoge(
-                                        context,
-                                        "Note",
-                                        'Il ne reste plus aucun joueur pour jouer. Ainsi, vous pouvez mettre fin à la situation',
-                                        "ok",
-                                      )
-                                    : null;
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["Turn.turnmontain2"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: tact1,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["turnaction"][0],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  style: const TextStyle(color: Colors.black),
+                                  items: <String>["Check", "Bet", "All-in"]
+                                      .map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      tact1 = noo.toString();
+                                    });
+                                  }),
                             ),
                           ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            tmont2 = value;
-                          });
-                        },
+                          const SizedBox(width: 5),
+                          widget.snap["turnaction"][0] == "Bet" ||
+                                  widget.snap["turnaction"][0] == "Raise" ||
+                                  widget.snap["turnaction"][0] == "Call" ||
+                                  widget.snap["turnaction"][0] == "All-in"
+                              ? SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      hintText: widget.snap["turnmontant"][0],
+                                      hintStyle:
+                                          const TextStyle(color: Colors.black),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        tmont1 = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          const Text(
+                            " , ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: tjour2,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["turnjoueur"][1],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  style: const TextStyle(color: Colors.black),
+                                  items: parf.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      tjour2 = noo.toString();
+                                    });
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: tact2,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["turnaction"][1],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  style: const TextStyle(color: Colors.black),
+                                  items: <String>[
+                                    "Check",
+                                    "Bet",
+                                    "Raise",
+                                    "Call",
+                                    "Fold",
+                                    "All-in"
+                                  ].map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      tact2 = noo.toString();
+                                      part = List.from(parf);
+                                      tact2 == act ? part.remove(tjour2) : null;
+                                    });
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          widget.snap["turnaction"][1] == "Bet" ||
+                                  widget.snap["turnaction"][1] == "Raise" ||
+                                  widget.snap["turnaction"][1] == "Call" ||
+                                  widget.snap["turnaction"][1] == "All-in"
+                              ? SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      hintText: widget.snap["turnmontant"][1],
+                                      hintStyle:
+                                          const TextStyle(color: Colors.black),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        tmont2 = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
+              const SizedBox(height: 5),
+              widget.snap["turnjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : EditNewSection(
+                      count: no!,
+                      turn: "3",
+                      jou: const [],
+                      index: 1,
+                      snap: widget.snap,
+                    ),
               const SizedBox(height: 5),
               SizedBox(
                 child: ListView.builder(
@@ -1775,198 +1805,230 @@ class _EditSituationState extends State<EditSituation> {
                 ),
               ),
               showCarts4 ? show(sample3, 1, "4") : const SizedBox.shrink(),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: rjour1,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["River.riverJoueur1"],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black),
+              widget.snap["riverjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
                             ),
-                            items: part.map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                rjour1 = noo.toString();
-                                // print
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: ract1,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["River.riveractions1"],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                            items: <String>["RAISE", "CHECK", "ALL-in"]
-                                .map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                ract1 = noo.toString();
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["River.rivermontain1"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: rjour1,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["riverjoueur"][0],
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  items: part.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      rjour1 = noo.toString();
+                                      // print
+                                    });
+                                  }),
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            rmont1 = value;
-                          });
-                        },
-                      ),
-                    ),
-                    const Text(
-                      " , ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: rjour2,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["River.riverJoueur2"],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black),
+                          const SizedBox(width: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
                             ),
-                            items: part.map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                rjour2 = noo.toString();
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: ract2,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["River.riveractions2"],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                            items: <String>["CHECK", "BET", "RAISE", "FOLD"]
-                                .map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                ract2 = noo.toString();
-                                parv = List.from(part);
-                                ract2 == act ? parv.remove(rjour2) : null;
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["River.rivermontain2"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: ract1,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["riveraction"][0],
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  items: <String>["Check", "Bet", "All-in"]
+                                      .map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      ract1 = noo.toString();
+                                    });
+                                  }),
                             ),
                           ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            rmont2 = value;
-                          });
-                        },
+                          const SizedBox(width: 5),
+                          widget.snap["riveraction"][0] == "Bet" ||
+                                  widget.snap["riveraction"][0] == "Raise" ||
+                                  widget.snap["riveraction"][0] == "Call" ||
+                                  widget.snap["riveraction"][0] == "All-in"
+                              ? SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      hintText: widget.snap["rivermontant"][0],
+                                      hintStyle:
+                                          const TextStyle(color: Colors.black),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        rmont1 = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          const Text(
+                            " , ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: rjour2,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["riverJoueur"][1],
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  items: part.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      rjour2 = noo.toString();
+                                    });
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: ract2,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: Text(
+                                    widget.snap["riveraction"][1],
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  items: <String>[
+                                    "Check",
+                                    "Bet",
+                                    "Raise",
+                                    "Call",
+                                    "Fold",
+                                    "All-in"
+                                  ].map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      ract2 = noo.toString();
+                                      parv = List.from(part);
+                                      ract2 == act ? parv.remove(rjour2) : null;
+                                    });
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          widget.snap["riveraction"][1] == "Bet" ||
+                                  widget.snap["riveraction"][1] == "Raise" ||
+                                  widget.snap["riveraction"][1] == "Call" ||
+                                  widget.snap["riveraction"][1] == "All-in"
+                              ? SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      hintText: widget.snap["rivermontant"][1],
+                                      hintStyle:
+                                          const TextStyle(color: Colors.black),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        rmont2 = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
+              const SizedBox(height: 5),
+              widget.snap["riverjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : EditNewSection(
+                      count: no!,
+                      turn: "4",
+                      jou: const [],
+                      index: 1,
+                      snap: widget.snap,
+                    ),
               const SizedBox(height: 5),
               SizedBox(
                 child: ListView.builder(
