@@ -93,6 +93,7 @@ class _EditSituationState extends State<EditSituation> {
     List fCarts = fn.isEmpty ? data["FlopCardValue"] : fn;
     List tCarts = fn.isEmpty ? data["TurnCardValue"] : fn;
     List rCarts = fn.isEmpty ? data["RiverCardValue"] : fn;
+    String not = note.text.isEmpty ? data["note"] : note.text;
     setState(() {
       isUpdating = true;
     });
@@ -112,6 +113,7 @@ class _EditSituationState extends State<EditSituation> {
       "FlopCardValue": fCarts,
       "TurnCardValue": tCarts,
       "RiverCardValue": rCarts,
+      "Note": not,
     });
     setState(() {
       isUpdating = false;
