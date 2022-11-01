@@ -48,7 +48,8 @@ class _NewSectionState extends State<NewSection> {
 
   search(value, List h) {
     print('hello world from search . the value is $value');
-    h.add(value);
+    int i = widget.index + 2;
+    h.length <= i ? h.add(value) : h[i] = value;
   }
 
   GvariablesController gc = Get.put(GvariablesController());
@@ -146,23 +147,6 @@ class _NewSectionState extends State<NewSection> {
                         onChanged: (noo) {
                           setState(() {
                             action = noo.toString();
-                            widget.turn == "2"
-                                ? action == "Fold" || action == "Check"
-                                    ? gc.fmonn.add("")
-                                    // : gc.fmonn.removeWhere(
-                                    //     (value) => [""].contains(value))
-                                    : null
-                                : widget.turn == "3"
-                                    ? action == "Fold" || action == "Check"
-                                        ? gc.tmonn.add("")
-                                        : null
-                                    // : gc.tmonn.removeWhere(
-                                    //     (value) => [""].contains(value))
-                                    : action == "Fold" || action == "Check"
-                                        ? gc.rmonn.add("")
-                                        : null;
-                            // : gc.rmonn.removeWhere(
-                            //     (value) => [""].contains(value));
                             int i = widget.index + 2;
                             widget.turn == "2"
                                 ? gc.facc.length <= i
@@ -182,6 +166,23 @@ class _NewSectionState extends State<NewSection> {
                                         ? gc.turnOne.add(joueur)
                                         : gc.riverOne.add(joueur)
                                 : null;
+                            widget.turn == "2"
+                                ? action == "Fold" || action == "Check"
+                                    ? gc.fmonn.length <= i
+                                        ? gc.fmonn.add("")
+                                        : gc.fmonn[i] = ""
+                                    : null
+                                : widget.turn == "3"
+                                    ? action == "Fold" || action == "Check"
+                                        ? gc.tmonn.length <= i
+                                            ? gc.tmonn.add("")
+                                            : gc.tmonn[i] = ""
+                                        : null
+                                    : action == "Fold" || action == "Check"
+                                        ? gc.rmonn.length <= i
+                                            ? gc.rmonn.add("")
+                                            : gc.rmonn[i] = ""
+                                        : null;
 
                             if (action == "Fold") {
                               if (widget.turn == "2" &&
@@ -369,10 +370,15 @@ class _NewSectionState extends State<NewSection> {
                       onChanged: (noo) {
                         setState(() {
                           action = noo.toString();
-                          action == "Fold" ? gc.fmonn.add("") : null;
+                          int i = widget.index + 2;
+                          action == "Fold"
+                              ? gc.premonn.length <= i
+                                  ? gc.premonn.add("")
+                                  : gc.premonn[i] = ""
+                              : null;
                           // : gc.fmonn
                           //     .removeWhere((value) => [""].contains(value));
-                          int i = widget.index + 2;
+
                           gc.preacc.length <= i
                               ? gc.preacc.add(action)
                               : gc.preacc[i] = action;

@@ -623,7 +623,9 @@ class _EditSituationState extends State<EditSituation> {
                   ],
                 ),
               ),
-              showCarts1 ? show(test, 2, "1") : const SizedBox.shrink(),
+              showCarts1
+                  ? show(widget.snap["SimpleCardValue"], 2, "1")
+                  : const SizedBox.shrink(),
               const SizedBox(height: 10),
               const Align(
                 alignment: Alignment.topLeft,
@@ -962,13 +964,15 @@ class _EditSituationState extends State<EditSituation> {
               const SizedBox(
                 height: 10,
               ),
-              EditNewSection(
-                count: no!,
-                turn: "1",
-                jou: const [],
-                index: 1,
-                snap: widget.snap,
-              ),
+              widget.snap["prejoueur"].length > 2
+                  ? EditNewSection(
+                      count: no!,
+                      turn: "1",
+                      jou: const [],
+                      index: 1,
+                      snap: widget.snap,
+                    )
+                  : const SizedBox.shrink(),
               const SizedBox(
                 height: 10,
               ),
@@ -987,119 +991,125 @@ class _EditSituationState extends State<EditSituation> {
               const SizedBox(
                 height: 15,
               ),
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isFinished = true;
-                    });
-                    customAlertDialoge(
-                        context,
-                        "Info",
-                        "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-                        "OK");
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                  },
-                  child: Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 248, 58, 58),
-                    ),
-                    child: const Text(
-                      " Fin du coup ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.topRight,
+              //   child: InkWell(
+              //     onTap: () {
+              //       setState(() {
+              //         isFinished = true;
+              //       });
+              //       customAlertDialoge(
+              //           context,
+              //           "Info",
+              //           "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
+              //           "OK");
+              //       _controller.jumpTo(_controller.position.maxScrollExtent);
+              //     },
+              //     child: Container(
+              //       height: 20,
+              //       decoration: const BoxDecoration(
+              //         color: Color.fromARGB(255, 248, 58, 58),
+              //       ),
+              //       child: const Text(
+              //         " Fin du coup ",
+              //         style: TextStyle(
+              //           fontWeight: FontWeight.w600,
+              //           color: Colors.white,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(height: 10),
               Container(
                 width: MediaQuery.of(context).size.width * .75,
                 color: Colors.black,
                 height: 2,
               ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Flop",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Align(
+              widget.snap["flopjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : const Align(
                       alignment: Alignment.topLeft,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            showCarts2 = !showCarts2;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                          ),
-                          child: const Text(
-                            "Select Carts",
-                            style: TextStyle(color: Colors.black),
-                          ),
+                      child: Text(
+                        "Flop",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: widget.snap["FlopCardValue"].length,
-                        itemBuilder: (context, index) {
-                          return printCarts(
-                              index, widget.snap["FlopCardValue"]);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["flopPot"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+              widget.snap["flopjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  showCarts2 = !showCarts2;
+                                });
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 100,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: const Text(
+                                  "Select Carts",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
                             ),
                           ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            pot1 = value;
-                          });
-                        },
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: widget.snap["FlopCardValue"].length,
+                              itemBuilder: (context, index) {
+                                return printCarts(
+                                    index, widget.snap["FlopCardValue"]);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                hintText: widget.snap["flopPot"],
+                                hintStyle: const TextStyle(color: Colors.black),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  pot1 = value;
+                                });
+                              },
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-              showCarts2 ? show(sample1, 3, "2") : const SizedBox.shrink(),
+                    ),
+              showCarts2
+                  ? show(widget.snap["FlopCardValue"], 3, "2")
+                  : const SizedBox.shrink(),
               const SizedBox(
                 height: 10,
               ),
@@ -1338,123 +1348,107 @@ class _EditSituationState extends State<EditSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              addButton(sn),
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isFinished = true;
-                    });
-                    customAlertDialoge(
-                        context,
-                        "Info",
-                        "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-                        "OK");
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                  },
-                  child: Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 248, 58, 58),
+              widget.snap["flopjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : addButton(sn),
+
+              widget.snap["flopjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : const SizedBox(height: 10),
+              widget.snap["flopjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : Container(
+                      width: MediaQuery.of(context).size.width * .75,
+                      color: Colors.black,
+                      height: 2,
                     ),
-                    child: const Text(
-                      " Fin du coup ",
-                      style: TextStyle(
-                        // fontSize: 27,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * .75,
-                color: Colors.black,
-                height: 2,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Turn",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Align(
+              widget.snap["turnjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : const SizedBox(height: 10),
+              widget.snap["turnjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : const Align(
                       alignment: Alignment.topLeft,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            showCarts3 = !showCarts3;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                          ),
-                          child: const Text(
-                            "Select Carts",
-                            style: TextStyle(color: Colors.black),
-                          ),
+                      child: Text(
+                        "Turn",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: widget.snap["TurnCardValue"].length,
-                        itemBuilder: (context, index) {
-                          return printCarts(
-                              index, widget.snap["TurnCardValue"]);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["turnPot"],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+              widget.snap["turnjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  showCarts3 = !showCarts3;
+                                });
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 100,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: const Text(
+                                  "Select Carts",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            pot2 = value;
-                          });
-                        },
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: widget.snap["TurnCardValue"].length,
+                              itemBuilder: (context, index) {
+                                return printCarts(
+                                    index, widget.snap["TurnCardValue"]);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                hintText: widget.snap["turnPot"],
+                                hintStyle: const TextStyle(color: Colors.black),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  pot2 = value;
+                                });
+                              },
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-              showCarts3 ? show(sample2, 1, "3") : const SizedBox.shrink(),
+                    ),
+              showCarts3
+                  ? show(widget.snap["TurnCardValue"], 1, "3")
+                  : const SizedBox.shrink(),
               widget.snap["turnjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : SingleChildScrollView(
@@ -1690,123 +1684,106 @@ class _EditSituationState extends State<EditSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              addButton(tn),
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isFinished = true;
-                    });
-                    customAlertDialoge(
-                        context,
-                        "Info",
-                        "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-                        "OK");
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                    // print(sample1);
-                  },
-                  child: Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 248, 58, 58),
+              widget.snap["turnjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : addButton(tn),
+
+              widget.snap["turnjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : const SizedBox(height: 10),
+              widget.snap["turnjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : Container(
+                      width: MediaQuery.of(context).size.width * .75,
+                      color: Colors.black,
+                      height: 2,
                     ),
-                    child: const Text(
-                      " Fin du coup ",
-                      style: TextStyle(
-                        // fontSize: 27,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * .75,
-                color: Colors.black,
-                height: 2,
-              ),
               const SizedBox(
                 height: 10,
               ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "River",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Align(
+              widget.snap["riverjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : const Align(
                       alignment: Alignment.topLeft,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            showCarts4 = !showCarts4;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                          ),
-                          child: const Text(
-                            "Select Carts",
-                            style: TextStyle(color: Colors.black),
-                          ),
+                      child: Text(
+                        "River",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: widget.snap["RiverCardValue"].length,
-                        itemBuilder: (context, index) {
-                          return printCarts(
-                              index, widget.snap["RiverCardValue"]);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["riverPot"],
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+              widget.snap["riverjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  showCarts4 = !showCarts4;
+                                });
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 100,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: const Text(
+                                  "Select Carts",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            pot3 = value;
-                          });
-                        },
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: widget.snap["RiverCardValue"].length,
+                              itemBuilder: (context, index) {
+                                return printCarts(
+                                    index, widget.snap["RiverCardValue"]);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                hintText: widget.snap["riverPot"],
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  pot3 = value;
+                                });
+                              },
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-              showCarts4 ? show(sample3, 1, "4") : const SizedBox.shrink(),
+                    ),
+              showCarts4
+                  ? show(widget.snap["RiverCardValue"], 1, "4")
+                  : const SizedBox.shrink(),
               widget.snap["riverjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : SingleChildScrollView(
@@ -1928,7 +1905,7 @@ class _EditSituationState extends State<EditSituation> {
                                       visible: false,
                                       child: Icon(Icons.arrow_downward)),
                                   hint: Text(
-                                    widget.snap["riverJoueur"][1],
+                                    widget.snap["riverjoueur"][1],
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(color: Colors.black),
                                   ),
@@ -2043,44 +2020,20 @@ class _EditSituationState extends State<EditSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              addButton(frn),
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isFinished = true;
-                    });
-                    customAlertDialoge(
-                        context,
-                        "Info",
-                        "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-                        "OK");
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                    // print(sample1);
-                  },
-                  child: Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 248, 58, 58),
+              widget.snap["riverjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : addButton(frn),
+
+              widget.snap["riverjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : const SizedBox(height: 10),
+              widget.snap["riverjoueur"].isEmpty
+                  ? const SizedBox.shrink()
+                  : Container(
+                      width: MediaQuery.of(context).size.width * .75,
+                      color: Colors.black,
+                      height: 2,
                     ),
-                    child: const Text(
-                      " Fin du coup ",
-                      style: TextStyle(
-                        // fontSize: 27,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * .75,
-                color: Colors.black,
-                height: 2,
-              ),
               const SizedBox(
                 height: 10,
               ),

@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:card_app/screens/Situation_part/Flop/utills.dart';
 import 'package:card_app/screens/Situation_part/resources/store_to_firestor.dart';
-import 'package:card_app/screens/Situation_part/select_carts.dart';
 import 'package:card_app/screens/Situation_part/widgets/alertdialoge.dart';
 import 'package:card_app/widgets/utills.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,6 +73,7 @@ class _CreateSituationState extends State<CreateSituation> {
   String? rjour1, rjour2, ract1, ract2, rmont1, rmont2;
   String act = "Fold";
   List par = [], parf = [], part = [], parv = [];
+  bool x1 = false, x2 = false, x3 = false, x4 = false;
   var preff;
   List checkit = [];
   List total = [];
@@ -201,7 +200,7 @@ class _CreateSituationState extends State<CreateSituation> {
 
   Timer? searchOnStoppedTyping;
 
-  _onChangeHandler(value, List list) {
+  _onChangeHandler(value, List list, String turn) {
     const duration = Duration(
       milliseconds: 1000,
     );
@@ -211,12 +210,20 @@ class _CreateSituationState extends State<CreateSituation> {
     }
 
     setState(() =>
-        searchOnStoppedTyping = Timer(duration, () => search(value, list)));
+        searchOnStoppedTyping = Timer(duration, () => add(value, list, turn)));
   }
 
-  search(value, List h) {
+  add(value, List h, String turn) {
     print('hello world from search . the value is $value');
-    h.add(value);
+    turn == "1f" || turn == "2f" || turn == "3f" || turn == "4f"
+        ? h.isEmpty
+            ? h.add(value)
+            : h[0] = value
+        : turn == "1l" || turn == "2l" || turn == "3l" || turn == "4l"
+            ? h.length < 2
+                ? h.add(value)
+                : h[1] = value
+            : null;
   }
 
   @override
@@ -740,363 +747,439 @@ class _CreateSituationState extends State<CreateSituation> {
                 ),
               ),
               showCarts1 ? show(test, 2, "1") : const SizedBox.shrink(),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Preflop",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+              const SizedBox(
+                height: 15,
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      x4 = true;
+                    });
+                    // setState(() {
+                    //   isFinished = true;
+                    // });
+                    // customAlertDialoge(
+                    //     context,
+                    //     "Info",
+                    //     "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
+                    //     "OK");
+                    // _controller.jumpTo(_controller.position.maxScrollExtent);
+                  },
+                  child: Container(
+                    height: 20,
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 248, 58, 58),
+                    ),
+                    child: const Text(
+                      " See more ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
+              !x4 ? const SizedBox.shrink() : const SizedBox(height: 10),
+              !x4
+                  ? const SizedBox.shrink()
+                  : const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Preflop",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: prejour1,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: const Text(
-                              "joueur",
-                              textAlign: TextAlign.center,
+              !x4
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
                             ),
-                            items: no == "2"
-                                ? j2.map((value) {
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: prejour1,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: const Text(
+                                    "joueur",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  items: no == "2"
+                                      ? j2.map((value) {
+                                          return DropdownMenuItem(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList()
+                                      : no == "3"
+                                          ? j3.map((value) {
+                                              return DropdownMenuItem(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList()
+                                          : no == "4"
+                                              ? j4.map((value) {
+                                                  return DropdownMenuItem(
+                                                    value: value,
+                                                    child: Text(value),
+                                                  );
+                                                }).toList()
+                                              : no == "5"
+                                                  ? j5.map((value) {
+                                                      return DropdownMenuItem(
+                                                        value: value,
+                                                        child: Text(value),
+                                                      );
+                                                    }).toList()
+                                                  : no == "6"
+                                                      ? j6.map((value) {
+                                                          return DropdownMenuItem(
+                                                            value: value,
+                                                            child: Text(value),
+                                                          );
+                                                        }).toList()
+                                                      : no == "7"
+                                                          ? j7.map((value) {
+                                                              return DropdownMenuItem(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              );
+                                                            }).toList()
+                                                          : no == "8"
+                                                              ? j8.map((value) {
+                                                                  return DropdownMenuItem(
+                                                                    value:
+                                                                        value,
+                                                                    child: Text(
+                                                                        value),
+                                                                  );
+                                                                }).toList()
+                                                              : no == "9"
+                                                                  ? j9.map(
+                                                                      (value) {
+                                                                      return DropdownMenuItem(
+                                                                        value:
+                                                                            value,
+                                                                        child: Text(
+                                                                            value),
+                                                                      );
+                                                                    }).toList()
+                                                                  : <String>[
+                                                                      ""
+                                                                    ].map(
+                                                                      (value) {
+                                                                      return DropdownMenuItem(
+                                                                        value:
+                                                                            value,
+                                                                        child: Text(
+                                                                            value),
+                                                                      );
+                                                                    }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      prejour1 = noo.toString();
+                                      gvariablesController.globalOne
+                                          .add(prejour1);
+                                      gvariablesController.prejuu.isEmpty
+                                          ? gvariablesController.prejuu
+                                              .add(prejour1)
+                                          : gvariablesController.prejuu[0] =
+                                              prejour1;
+                                    });
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: preact1,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: const Text(
+                                    "Actions",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  items: <String>["Raise", "Call", "All-in"]
+                                      .map((value) {
                                     return DropdownMenuItem(
                                       value: value,
                                       child: Text(value),
                                     );
-                                  }).toList()
-                                : no == "3"
-                                    ? j3.map((value) {
-                                        return DropdownMenuItem(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList()
-                                    : no == "4"
-                                        ? j4.map((value) {
-                                            return DropdownMenuItem(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList()
-                                        : no == "5"
-                                            ? j5.map((value) {
-                                                return DropdownMenuItem(
-                                                  value: value,
-                                                  child: Text(value),
-                                                );
-                                              }).toList()
-                                            : no == "6"
-                                                ? j6.map((value) {
-                                                    return DropdownMenuItem(
-                                                      value: value,
-                                                      child: Text(value),
-                                                    );
-                                                  }).toList()
-                                                : no == "7"
-                                                    ? j7.map((value) {
-                                                        return DropdownMenuItem(
-                                                          value: value,
-                                                          child: Text(value),
-                                                        );
-                                                      }).toList()
-                                                    : no == "8"
-                                                        ? j8.map((value) {
-                                                            return DropdownMenuItem(
-                                                              value: value,
-                                                              child:
-                                                                  Text(value),
-                                                            );
-                                                          }).toList()
-                                                        : no == "9"
-                                                            ? j9.map((value) {
-                                                                return DropdownMenuItem(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList()
-                                                            : <String>[""]
-                                                                .map((value) {
-                                                                return DropdownMenuItem(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                prejour1 = noo.toString();
-                                gvariablesController.globalOne.add(prejour1);
-                                gvariablesController.prejuu.isEmpty
-                                    ? gvariablesController.prejuu.add(prejour1)
-                                    : gvariablesController.prejuu[0] = prejour1;
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: preact1,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: const Text(
-                              "Actions",
-                              textAlign: TextAlign.center,
-                            ),
-                            items: <String>["Raise", "Call", "All-in"]
-                                .map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                preact1 = noo.toString();
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      preact1 = noo.toString();
 
-                                gvariablesController.preacc.isEmpty
-                                    ? gvariablesController.preacc.add(preact1)
-                                    : gvariablesController.preacc[0] = preact1;
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    preact1 != null
-                        ? SizedBox(
-                            width: 100,
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: "montant",
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
+                                      gvariablesController.preacc.isEmpty
+                                          ? gvariablesController.preacc
+                                              .add(preact1)
+                                          : gvariablesController.preacc[0] =
+                                              preact1;
+                                    });
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          preact1 != null
+                              ? SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: "montant",
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                    onChanged: (value) {
+                                      _onChangeHandler(
+                                        value,
+                                        gvariablesController.premonn,
+                                        "1f",
+                                      );
+                                    },
                                   ),
-                                ),
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10),
+                                )
+                              : const SizedBox.shrink(),
+                          const Text(
+                            " , ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
                               ),
-                              onChanged: (value) {
-                                _onChangeHandler(
-                                  value,
-                                  gvariablesController.premonn,
-                                );
-                              },
                             ),
-                          )
-                        : const SizedBox.shrink(),
-                    const Text(
-                      " , ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: prejour2,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: const Text(
-                              "joueur",
-                              textAlign: TextAlign.center,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: prejour2,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: const Text(
+                                    "joueur",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  items: no == "2"
+                                      ? j2.map((value) {
+                                          return DropdownMenuItem(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList()
+                                      : no == "3"
+                                          ? j3.map((value) {
+                                              return DropdownMenuItem(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList()
+                                          : no == "4"
+                                              ? j4.map((value) {
+                                                  return DropdownMenuItem(
+                                                    value: value,
+                                                    child: Text(value),
+                                                  );
+                                                }).toList()
+                                              : no == "5"
+                                                  ? j5.map((value) {
+                                                      return DropdownMenuItem(
+                                                        value: value,
+                                                        child: Text(value),
+                                                      );
+                                                    }).toList()
+                                                  : no == "6"
+                                                      ? j6.map((value) {
+                                                          return DropdownMenuItem(
+                                                            value: value,
+                                                            child: Text(value),
+                                                          );
+                                                        }).toList()
+                                                      : no == "7"
+                                                          ? j7.map((value) {
+                                                              return DropdownMenuItem(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              );
+                                                            }).toList()
+                                                          : no == "8"
+                                                              ? j8.map((value) {
+                                                                  return DropdownMenuItem(
+                                                                    value:
+                                                                        value,
+                                                                    child: Text(
+                                                                        value),
+                                                                  );
+                                                                }).toList()
+                                                              : no == "9"
+                                                                  ? j9.map(
+                                                                      (value) {
+                                                                      return DropdownMenuItem(
+                                                                        value:
+                                                                            value,
+                                                                        child: Text(
+                                                                            value),
+                                                                      );
+                                                                    }).toList()
+                                                                  : <String>[
+                                                                      ""
+                                                                    ].map(
+                                                                      (value) {
+                                                                      return DropdownMenuItem(
+                                                                        value:
+                                                                            value,
+                                                                        child: Text(
+                                                                            value),
+                                                                      );
+                                                                    }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      prejour2 = noo.toString();
+                                      gvariablesController.prejuu.length < 2
+                                          ? gvariablesController.prejuu
+                                              .add(prejour2)
+                                          : gvariablesController.prejuu[1] =
+                                              prejour2;
+                                    });
+                                  }),
                             ),
-                            items: no == "2"
-                                ? j2.map((value) {
+                          ),
+                          const SizedBox(width: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  alignment: Alignment.center,
+                                  value: preact2,
+                                  icon: const Visibility(
+                                      visible: false,
+                                      child: Icon(Icons.arrow_downward)),
+                                  hint: const Text(
+                                    "Actions",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  items: <String>[
+                                    "Raise",
+                                    "Call",
+                                    "All-in",
+                                    "Fold"
+                                  ].map((value) {
                                     return DropdownMenuItem(
                                       value: value,
                                       child: Text(value),
                                     );
-                                  }).toList()
-                                : no == "3"
-                                    ? j3.map((value) {
-                                        return DropdownMenuItem(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList()
-                                    : no == "4"
-                                        ? j4.map((value) {
-                                            return DropdownMenuItem(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList()
-                                        : no == "5"
-                                            ? j5.map((value) {
-                                                return DropdownMenuItem(
-                                                  value: value,
-                                                  child: Text(value),
-                                                );
-                                              }).toList()
-                                            : no == "6"
-                                                ? j6.map((value) {
-                                                    return DropdownMenuItem(
-                                                      value: value,
-                                                      child: Text(value),
-                                                    );
-                                                  }).toList()
-                                                : no == "7"
-                                                    ? j7.map((value) {
-                                                        return DropdownMenuItem(
-                                                          value: value,
-                                                          child: Text(value),
-                                                        );
-                                                      }).toList()
-                                                    : no == "8"
-                                                        ? j8.map((value) {
-                                                            return DropdownMenuItem(
-                                                              value: value,
-                                                              child:
-                                                                  Text(value),
-                                                            );
-                                                          }).toList()
-                                                        : no == "9"
-                                                            ? j9.map((value) {
-                                                                return DropdownMenuItem(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList()
-                                                            : <String>[""]
-                                                                .map((value) {
-                                                                return DropdownMenuItem(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                prejour2 = noo.toString();
-                                gvariablesController.prejuu.length < 2
-                                    ? gvariablesController.prejuu.add(prejour2)
-                                    : gvariablesController.prejuu[1] = prejour2;
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: preact2,
-                            icon: const Visibility(
-                                visible: false,
-                                child: Icon(Icons.arrow_downward)),
-                            hint: const Text(
-                              "Actions",
-                              textAlign: TextAlign.center,
+                                  }).toList(),
+                                  onChanged: (noo) {
+                                    setState(() {
+                                      preact2 = noo.toString();
+                                      preact2 == act
+                                          ? gvariablesController
+                                                      .premonn.length <
+                                                  2
+                                              ? gvariablesController.premonn
+                                                  .add("")
+                                              : gvariablesController
+                                                  .premonn[1] = ""
+                                          : null;
+                                      // : gvariablesController.premonn.removeWhere(
+                                      //     (value) => [""].contains(value));
+
+                                      preact2 != act
+                                          ? gvariablesController.globalOne
+                                              .add(prejour2)
+                                          : null;
+
+                                      if (preact2 == act &&
+                                          gvariablesController.globalOne
+                                              .contains(prejour2)) {
+                                        gvariablesController.globalOne
+                                            .remove(prejour2);
+                                      }
+
+                                      gvariablesController.preacc.length < 2
+                                          ? gvariablesController.preacc
+                                              .add(preact2)
+                                          : gvariablesController.preacc[1] =
+                                              preact2;
+                                    });
+                                  }),
                             ),
-                            items: <String>["Raise", "Call", "All-in", "Fold"]
-                                .map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (noo) {
-                              setState(() {
-                                preact2 = noo.toString();
-                                preact2 == act
-                                    ? gvariablesController.premonn.add("")
-                                    // : gvariablesController.premonn.removeWhere(
-                                    //     (value) => [""].contains(value));
-                                    : null;
-                                preact2 != act
-                                    ? gvariablesController.globalOne
-                                        .add(prejour2)
-                                    : null;
-
-                                if (preact2 == act &&
-                                    gvariablesController.globalOne
-                                        .contains(prejour2)) {
-                                  gvariablesController.globalOne
-                                      .remove(prejour2);
-                                }
-
-                                gvariablesController.preacc.length < 2
-                                    ? gvariablesController.preacc.add(preact2)
-                                    : gvariablesController.preacc[1] = preact2;
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    preact2 == "Raise" ||
-                            preact2 == "Call" ||
-                            preact2 == "All-in"
-                        ? SizedBox(
-                            width: 100,
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: "montant",
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
+                          ),
+                          const SizedBox(width: 5),
+                          preact2 == "Raise" ||
+                                  preact2 == "Call" ||
+                                  preact2 == "All-in"
+                              ? SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: "montant",
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                    onChanged: (value) {
+                                      _onChangeHandler(
+                                        value,
+                                        gvariablesController.premonn,
+                                        "1l",
+                                      );
+                                    },
                                   ),
-                                ),
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10),
-                              ),
-                              onChanged: (value) {
-                                _onChangeHandler(
-                                  value,
-                                  gvariablesController.premonn,
-                                );
-                              },
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                  ],
-                ),
-              ),
+                                )
+                              : const SizedBox.shrink(),
+                        ],
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
               ),
@@ -1111,731 +1194,808 @@ class _CreateSituationState extends State<CreateSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              addButton(fn),
-              const SizedBox(
-                height: 15,
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isFinished = true;
-                    });
-                    customAlertDialoge(
-                        context,
-                        "Info",
-                        "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-                        "OK");
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                  },
-                  child: Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 248, 58, 58),
+              !x4 ? const SizedBox.shrink() : addButton(fn),
+              !x4
+                  ? const SizedBox.shrink()
+                  : const SizedBox(
+                      height: 15,
                     ),
-                    child: const Text(
-                      " Fin du coup ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * .75,
-                color: Colors.black,
-                height: 2,
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Flop",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
+              !x4
+                  ? const SizedBox.shrink()
+                  : Align(
+                      alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            showCarts2 = !showCarts2;
+                            x1 = true;
                           });
+                          // setState(() {
+                          //   isFinished = true;
+                          // });
+                          // customAlertDialoge(
+                          //     context,
+                          //     "Info",
+                          //     "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
+                          //     "OK");
+                          // _controller.jumpTo(_controller.position.maxScrollExtent);
                         },
                         child: Container(
-                          height: 40,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 248, 58, 58),
                           ),
                           child: const Text(
-                            "Select Carts",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: sample1.length,
-                        itemBuilder: (context, index) {
-                          return printCarts(index, sample1);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Pot",
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            " See more ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            pot1 = value;
-                          });
-                        },
                       ),
-                    )
-                  ],
-                ),
-              ),
+                    ),
+              !x4 ? const SizedBox.shrink() : const SizedBox(height: 10),
+              !x4
+                  ? const SizedBox.shrink()
+                  : Container(
+                      width: MediaQuery.of(context).size.width * .75,
+                      color: Colors.black,
+                      height: 2,
+                    ),
+              !x1
+                  ? const SizedBox.shrink()
+                  : const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Flop",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+              !x1
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  showCarts2 = !showCarts2;
+                                  // print(
+                                  //     "action ${gvariablesController.preacc}");
+                                  // print(
+                                  //     "montant ${gvariablesController.premonn}");
+                                });
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 100,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: const Text(
+                                  "Select Carts",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: sample1.length,
+                              itemBuilder: (context, index) {
+                                return printCarts(index, sample1);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: "Pot",
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  pot1 = value;
+                                });
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
               showCarts2 ? show(sample1, 3, "2") : const SizedBox.shrink(),
               const SizedBox(
                 height: 10,
               ),
-              Obx(
-                () => SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: fjour1,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "joueur",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: gvariablesController.globalOne
-                                  .toSet()
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  fjour1 = noo.toString();
-                                  gvariablesController.flopOne.add(fjour1);
-                                  gvariablesController.fjuu.isEmpty
-                                      ? gvariablesController.fjuu.add(fjour1)
-                                      : gvariablesController.fjuu[0] = fjour1;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: fact1,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "Actions",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: <String>["Check", "Bet", "All-in"]
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  fact1 = noo.toString();
-                                  fact1 == "Check"
-                                      ? gvariablesController.fmonn.add("")
-                                      // : gvariablesController.fmonn.removeWhere(
-                                      //     (value) => [""].contains(value));
-                                      : null;
-                                  gvariablesController.facc.isEmpty
-                                      ? gvariablesController.facc.add(fact1)
-                                      : gvariablesController.facc[0] = fact1;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      fact2 == "Bet" || fact2 == "All-in"
-                          ? SizedBox(
-                              width: 100,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: "montant",
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
+              !x1
+                  ? const SizedBox.shrink()
+                  : Obx(
+                      () => SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
                                 ),
-                                onChanged: (value) {
-                                  _onChangeHandler(
-                                    value,
-                                    gvariablesController.fmonn,
-                                  );
-                                },
                               ),
-                            )
-                          : const SizedBox.shrink(),
-                      const Text(
-                        " , ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: fjour2,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "joueur",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: gvariablesController.globalOne
-                                  .toSet()
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  fjour2 = noo.toString();
-                                  gvariablesController.fjuu.length < 2
-                                      ? gvariablesController.fjuu.add(fjour2)
-                                      : gvariablesController.fjuu[1] = fjour2;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: fact2,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "Actions",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: <String>[
-                                "Check",
-                                "Bet",
-                                "Raise",
-                                "Call",
-                                "Fold",
-                                "All-in"
-                              ].map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  fact2 = noo.toString();
-                                  fact2 == act || fact2 == "Check"
-                                      ? gvariablesController.fmonn.add("")
-                                      // : gvariablesController.fmonn.removeWhere(
-                                      //     (value) => [""].contains(value));
-                                      : null;
-                                  gvariablesController.facc.length < 2
-                                      ? gvariablesController.facc.add(fact2)
-                                      : gvariablesController.facc[1] = fact2;
-                                  fact2 != act
-                                      ? gvariablesController.flopOne.add(fjour2)
-                                      : null;
-                                  if (fact2 == act &&
-                                      gvariablesController.flopOne
-                                          .contains(fjour2)) {
-                                    gvariablesController.flopOne.remove(fjour2);
-                                  }
-                                  // if (gvariablesController.flopO.isNotEmpty) {
-                                  //   gvariablesController.flopOne
-                                  //       .remove(gvariablesController.flopO[0]);
-                                  // }
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      fact2 == "Bet" ||
-                              fact2 == "Raise" ||
-                              fact2 == "Call" ||
-                              fact2 == "All-in"
-                          ? SizedBox(
-                              width: 100,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: "Montant",
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: fjour1,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "joueur",
+                                      textAlign: TextAlign.center,
                                     ),
-                                  ),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
-                                ),
-                                onChanged: (value) {
-                                  _onChangeHandler(
-                                    value,
-                                    gvariablesController.fmonn,
-                                  );
-                                },
+                                    items: gvariablesController.globalOne
+                                        .toSet()
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        fjour1 = noo.toString();
+                                        gvariablesController.flopOne
+                                            .add(fjour1);
+                                        gvariablesController.fjuu.isEmpty
+                                            ? gvariablesController.fjuu
+                                                .add(fjour1)
+                                            : gvariablesController.fjuu[0] =
+                                                fjour1;
+                                      });
+                                    }),
                               ),
-                            )
-                          : const SizedBox.shrink(),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5),
-              SizedBox(
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: sn.length,
-                  itemBuilder: (context, index) {
-                    return newOne(sn, no, "2", index);
-                  },
-                ),
-              ),
-              const SizedBox(height: 5),
-              addButton(sn),
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isFinished = true;
-                    });
-                    customAlertDialoge(
-                        context,
-                        "Info",
-                        "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-                        "OK");
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                  },
-                  child: Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 248, 58, 58),
-                    ),
-                    child: const Text(
-                      " Fin du coup ",
-                      style: TextStyle(
-                        // fontSize: 27,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                            ),
+                            const SizedBox(width: 5),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: fact1,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "Actions",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: <String>["Check", "Bet", "All-in"]
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        fact1 = noo.toString();
+                                        fact1 == "Check"
+                                            ? gvariablesController.fmonn.isEmpty
+                                                ? gvariablesController.fmonn
+                                                    .add("")
+                                                : gvariablesController
+                                                    .fmonn[0] = ""
+                                            // : gvariablesController.fmonn.removeWhere(
+                                            //     (value) => [""].contains(value));
+                                            : null;
+                                        gvariablesController.facc.isEmpty
+                                            ? gvariablesController.facc
+                                                .add(fact1)
+                                            : gvariablesController.facc[0] =
+                                                fact1;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            fact1 == "Bet" || fact1 == "All-in"
+                                ? SizedBox(
+                                    width: 100,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "montant",
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                      ),
+                                      onChanged: (value) {
+                                        _onChangeHandler(value,
+                                            gvariablesController.fmonn, "2f");
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            const Text(
+                              " , ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: fjour2,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "joueur",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: gvariablesController.globalOne
+                                        .toSet()
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        fjour2 = noo.toString();
+                                        gvariablesController.fjuu.length < 2
+                                            ? gvariablesController.fjuu
+                                                .add(fjour2)
+                                            : gvariablesController.fjuu[1] =
+                                                fjour2;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: fact2,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "Actions",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: <String>[
+                                      "Check",
+                                      "Bet",
+                                      "Raise",
+                                      "Call",
+                                      "Fold",
+                                      "All-in"
+                                    ].map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        fact2 = noo.toString();
+                                        fact2 == act || fact2 == "Check"
+                                            ? gvariablesController
+                                                        .fmonn.length <
+                                                    2
+                                                ? gvariablesController.fmonn
+                                                    .add("")
+                                                : gvariablesController
+                                                    .fmonn[1] = ""
+                                            // : gvariablesController.fmonn.removeWhere(
+                                            //     (value) => [""].contains(value));
+                                            : null;
+                                        gvariablesController.facc.length < 2
+                                            ? gvariablesController.facc
+                                                .add(fact2)
+                                            : gvariablesController.facc[1] =
+                                                fact2;
+                                        fact2 != act
+                                            ? gvariablesController.flopOne
+                                                .add(fjour2)
+                                            : null;
+                                        if (fact2 == act &&
+                                            gvariablesController.flopOne
+                                                .contains(fjour2)) {
+                                          gvariablesController.flopOne
+                                              .remove(fjour2);
+                                        }
+                                        // if (gvariablesController.flopO.isNotEmpty) {
+                                        //   gvariablesController.flopOne
+                                        //       .remove(gvariablesController.flopO[0]);
+                                        // }
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            fact2 == "Bet" ||
+                                    fact2 == "Raise" ||
+                                    fact2 == "Call" ||
+                                    fact2 == "All-in"
+                                ? SizedBox(
+                                    width: 100,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "Montant",
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                      ),
+                                      onChanged: (value) {
+                                        _onChangeHandler(
+                                          value,
+                                          gvariablesController.fmonn,
+                                          "2l",
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * .75,
-                color: Colors.black,
-                height: 2,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Turn",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
+              const SizedBox(height: 5),
+              !x1
+                  ? const SizedBox.shrink()
+                  : SizedBox(
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: sn.length,
+                        itemBuilder: (context, index) {
+                          return newOne(sn, no, "2", index);
+                        },
+                      ),
+                    ),
+              !x1 ? const SizedBox.shrink() : const SizedBox(height: 5),
+              !x1 ? const SizedBox.shrink() : addButton(sn),
+              !x1
+                  ? const SizedBox.shrink()
+                  : Align(
+                      alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            showCarts3 = !showCarts3;
+                            x2 = true;
                           });
+                          // setState(() {
+                          //   isFinished = true;
+                          // });
+                          // customAlertDialoge(
+                          //     context,
+                          //     "Info",
+                          //     "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
+                          //     "OK");
+                          // _controller
+                          //     .jumpTo(_controller.position.maxScrollExtent);
                         },
                         child: Container(
-                          height: 40,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 248, 58, 58),
                           ),
                           child: const Text(
-                            "Select Carts",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: sample2.length,
-                        itemBuilder: (context, index) {
-                          return printCarts(index, sample2);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Pot",
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            " See more ",
+                            style: TextStyle(
+                              // fontSize: 27,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            pot2 = value;
-                          });
-                        },
                       ),
-                    )
-                  ],
-                ),
+                    ),
+              !x1 ? const SizedBox.shrink() : const SizedBox(height: 10),
+              !x1
+                  ? const SizedBox.shrink()
+                  : Container(
+                      width: MediaQuery.of(context).size.width * .75,
+                      color: Colors.black,
+                      height: 2,
+                    ),
+              const SizedBox(
+                height: 10,
               ),
+              !x2
+                  ? const SizedBox.shrink()
+                  : const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Turn",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+              !x2
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  showCarts3 = !showCarts3;
+                                });
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 100,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: const Text(
+                                  "Select Carts",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: sample2.length,
+                              itemBuilder: (context, index) {
+                                return printCarts(index, sample2);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: "Pot",
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  pot2 = value;
+                                });
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
               showCarts3 ? show(sample2, 1, "3") : const SizedBox.shrink(),
-              Obx(
-                () => SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: tjour1,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "joueur",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: gvariablesController.flopOne
-                                  .toSet()
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  tjour1 = noo.toString();
-                                  gvariablesController.turnOne.add(tjour1);
-                                  gvariablesController.tjuu.isEmpty
-                                      ? gvariablesController.tjuu.add(tjour1)
-                                      : gvariablesController.tjuu[0] = tjour1;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: tact1,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "Actions",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: <String>["Check", "Bet", "All-in"]
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  tact1 = noo.toString();
-                                  tact1 == "Check"
-                                      ? gvariablesController.tmonn.add("")
-                                      // : gvariablesController.tmonn.removeWhere(
-                                      //     (value) => [""].contains(value));
-                                      : null;
-                                  gvariablesController.tacc.isEmpty
-                                      ? gvariablesController.tacc.add(tact1)
-                                      : gvariablesController.tacc[0] = tact1;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      tact1 == "Bet" || tact1 == "All-in"
-                          ? SizedBox(
-                              width: 100,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: "montant",
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
+              !x2
+                  ? const SizedBox.shrink()
+                  : Obx(
+                      () => SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
                                 ),
-                                onChanged: (value) {
-                                  _onChangeHandler(
-                                    value,
-                                    gvariablesController.tmonn,
-                                  );
-                                },
                               ),
-                            )
-                          : const SizedBox.shrink(),
-                      const Text(
-                        " , ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: tjour2,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "joueur",
-                                textAlign: TextAlign.center,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: tjour1,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "joueur",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: gvariablesController.flopOne
+                                        .toSet()
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        tjour1 = noo.toString();
+                                        gvariablesController.turnOne
+                                            .add(tjour1);
+                                        gvariablesController.tjuu.isEmpty
+                                            ? gvariablesController.tjuu
+                                                .add(tjour1)
+                                            : gvariablesController.tjuu[0] =
+                                                tjour1;
+                                      });
+                                    }),
                               ),
-                              items: gvariablesController.flopOne
-                                  .toSet()
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  tjour2 = noo.toString();
-                                  gvariablesController.tjuu.length < 2
-                                      ? gvariablesController.tjuu.add(tjour2)
-                                      : gvariablesController.tjuu[1] = tjour2;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: tact2,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "Actions",
-                                textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(width: 5),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
                               ),
-                              items: <String>[
-                                "Check",
-                                "Bet",
-                                "Raise",
-                                "Call",
-                                "Fold",
-                                "All-in"
-                              ].map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  tact2 = noo.toString();
-                                  tact2 == act || tact2 == "Check"
-                                      ? gvariablesController.tmonn.add("")
-                                      // : gvariablesController.tmonn.removeWhere(
-                                      //     (value) => [""].contains(value));
-                                      : null;
-                                  gvariablesController.tacc.length < 2
-                                      ? gvariablesController.tacc.add(tact2)
-                                      : gvariablesController.tacc[1] = tact2;
-                                  tact2 != act
-                                      ? gvariablesController.turnOne.add(tjour2)
-                                      : null;
-                                  if (tact2 == act &&
-                                      gvariablesController.turnOne
-                                          .contains(tjour2)) {
-                                    gvariablesController.turnOne.remove(tjour2);
-                                  }
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: tact1,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "Actions",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: <String>["Check", "Bet", "All-in"]
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        tact1 = noo.toString();
+                                        tact1 == "Check"
+                                            ? gvariablesController.tmonn.isEmpty
+                                                ? gvariablesController.tmonn
+                                                    .add("")
+                                                : gvariablesController
+                                                    .tmonn[0] = ""
+                                            // : gvariablesController.tmonn.removeWhere(
+                                            //     (value) => [""].contains(value));
+                                            : null;
+                                        gvariablesController.tacc.isEmpty
+                                            ? gvariablesController.tacc
+                                                .add(tact1)
+                                            : gvariablesController.tacc[0] =
+                                                tact1;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            tact1 == "Bet" || tact1 == "All-in"
+                                ? SizedBox(
+                                    width: 100,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "montant",
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                      ),
+                                      onChanged: (value) {
+                                        _onChangeHandler(
+                                          value,
+                                          gvariablesController.tmonn,
+                                          "3f",
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            const Text(
+                              " , ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: tjour2,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "joueur",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: gvariablesController.flopOne
+                                        .toSet()
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        tjour2 = noo.toString();
+                                        gvariablesController.tjuu.length < 2
+                                            ? gvariablesController.tjuu
+                                                .add(tjour2)
+                                            : gvariablesController.tjuu[1] =
+                                                tjour2;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: tact2,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "Actions",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: <String>[
+                                      "Check",
+                                      "Bet",
+                                      "Raise",
+                                      "Call",
+                                      "Fold",
+                                      "All-in"
+                                    ].map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        tact2 = noo.toString();
+                                        tact2 == act || tact2 == "Check"
+                                            ? gvariablesController
+                                                        .tmonn.length <
+                                                    2
+                                                ? gvariablesController.tmonn
+                                                    .add("")
+                                                : gvariablesController
+                                                    .tmonn[1] = ""
+                                            // : gvariablesController.tmonn.removeWhere(
+                                            //     (value) => [""].contains(value));
+                                            : null;
+                                        gvariablesController.tacc.length < 2
+                                            ? gvariablesController.tacc
+                                                .add(tact2)
+                                            : gvariablesController.tacc[1] =
+                                                tact2;
+                                        tact2 != act
+                                            ? gvariablesController.turnOne
+                                                .add(tjour2)
+                                            : null;
+                                        if (tact2 == act &&
+                                            gvariablesController.turnOne
+                                                .contains(tjour2)) {
+                                          gvariablesController.turnOne
+                                              .remove(tjour2);
+                                        }
 
-                                  // if (gvariablesController.turnO.isNotEmpty) {
-                                  //   gvariablesController.turnOne
-                                  //       .remove(gvariablesController.turnO[0]);
-                                  // }
-                                });
-                              }),
+                                        // if (gvariablesController.turnO.isNotEmpty) {
+                                        //   gvariablesController.turnOne
+                                        //       .remove(gvariablesController.turnO[0]);
+                                        // }
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            tact2 == "Bet" ||
+                                    tact2 == "Raise" ||
+                                    tact2 == "Call" ||
+                                    tact2 == "All-in"
+                                ? SizedBox(
+                                    width: 100,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "montant",
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                      ),
+                                      onChanged: (value) {
+                                        _onChangeHandler(value,
+                                            gvariablesController.tmonn, "3l");
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 5),
-                      tact2 == "Bet" ||
-                              tact2 == "Raise" ||
-                              tact2 == "Call" ||
-                              tact2 == "All-in"
-                          ? SizedBox(
-                              width: 100,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: "montant",
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
-                                ),
-                                onChanged: (value) {
-                                  _onChangeHandler(
-                                    value,
-                                    gvariablesController.tmonn,
-                                  );
-                                },
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
               const SizedBox(height: 5),
               SizedBox(
                 child: ListView.builder(
@@ -1848,350 +2008,383 @@ class _CreateSituationState extends State<CreateSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              addButton(tn),
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isFinished = true;
-                    });
-                    customAlertDialoge(
-                        context,
-                        "Info",
-                        "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-                        "OK");
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                    // print(sample1);
-                  },
-                  child: Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 248, 58, 58),
-                    ),
-                    child: const Text(
-                      " Fin du coup ",
-                      style: TextStyle(
-                        // fontSize: 27,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * .75,
-                color: Colors.black,
-                height: 2,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "River",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
+              !x2 ? const SizedBox.shrink() : addButton(tn),
+              !x2
+                  ? const SizedBox.shrink()
+                  : Align(
+                      alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            showCarts4 = !showCarts4;
-                            // print(total);
+                            x3 = true;
                           });
+                          // setState(() {
+                          //   isFinished = true;
+                          // });
+                          // customAlertDialoge(
+                          //     context,
+                          //     "Info",
+                          //     "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
+                          //     "OK");
+                          // _controller
+                          //     .jumpTo(_controller.position.maxScrollExtent);
+                          // print(sample1);
                         },
                         child: Container(
-                          height: 40,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 248, 58, 58),
                           ),
                           child: const Text(
-                            "Select Carts",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: sample3.length,
-                        itemBuilder: (context, index) {
-                          return printCarts(index, sample3);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Pot",
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
+                            " see more ",
+                            style: TextStyle(
+                              // fontSize: 27,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
                             ),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            pot3 = value;
-                          });
-                        },
                       ),
-                    )
-                  ],
-                ),
-              ),
+                    ),
+              !x2 ? const SizedBox.shrink() : const SizedBox(height: 10),
+              !x2
+                  ? const SizedBox.shrink()
+                  : Container(
+                      width: MediaQuery.of(context).size.width * .75,
+                      color: Colors.black,
+                      height: 2,
+                    ),
+              !x2 ? const SizedBox.shrink() : const SizedBox(height: 10),
+              !x3
+                  ? const SizedBox.shrink()
+                  : const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "River",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+              !x3
+                  ? const SizedBox.shrink()
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  showCarts4 = !showCarts4;
+                                  // print(total);
+                                });
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 100,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: const Text(
+                                  "Select Carts",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: sample3.length,
+                              itemBuilder: (context, index) {
+                                return printCarts(index, sample3);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          SizedBox(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: "Pot",
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  pot3 = value;
+                                });
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
               showCarts4 ? show(sample3, 1, "4") : const SizedBox.shrink(),
-              Obx(
-                () => SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: rjour1,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "joueur",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: gvariablesController.turnOne
-                                  .toSet()
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  rjour1 = noo.toString();
-                                  gvariablesController.rjuu.isEmpty
-                                      ? gvariablesController.rjuu.add(rjour1)
-                                      : gvariablesController.rjuu[0] = rjour1;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: ract1,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "Actions",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: <String>["Check", "Bet", "All-in"]
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  ract1 = noo.toString();
-                                  ract1 == "Check"
-                                      ? gvariablesController.rmonn.add("")
-                                      // : gvariablesController.rmonn.removeWhere(
-                                      //     (value) => [""].contains(value));
-                                      : null;
-                                  gvariablesController.racc.isEmpty
-                                      ? gvariablesController.racc.add(ract1)
-                                      : gvariablesController.racc[0] = ract1;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      ract1 == "Bet" || ract1 == "All-in"
-                          ? SizedBox(
-                              width: 100,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: "montant",
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
+              !x3
+                  ? const SizedBox.shrink()
+                  : Obx(
+                      () => SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
                                 ),
-                                onChanged: (value) {
-                                  _onChangeHandler(
-                                    value,
-                                    gvariablesController.rmonn,
-                                  );
-                                },
                               ),
-                            )
-                          : const SizedBox.shrink(),
-                      const Text(
-                        " , ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: rjour2,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "joueur",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: gvariablesController.turnOne
-                                  .toSet()
-                                  .map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  rjour2 = noo.toString();
-                                  gvariablesController.rjuu.length < 2
-                                      ? gvariablesController.rjuu.add(rjour2)
-                                      : gvariablesController.rjuu[1] = rjour2;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              alignment: Alignment.center,
-                              value: ract2,
-                              icon: const Visibility(
-                                  visible: false,
-                                  child: Icon(Icons.arrow_downward)),
-                              hint: const Text(
-                                "Actions",
-                                textAlign: TextAlign.center,
-                              ),
-                              items: <String>[
-                                "Check",
-                                "Bet",
-                                "Raise",
-                                "Call",
-                                "Fold",
-                                "All-in"
-                              ].map((value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (noo) {
-                                setState(() {
-                                  ract2 = noo.toString();
-                                  ract2 == act || ract2 == "Check"
-                                      ? gvariablesController.rmonn.add("")
-                                      // : gvariablesController.rmonn.removeWhere(
-                                      //     (value) => [""].contains(value));
-                                      : null;
-                                  gvariablesController.racc.length < 2
-                                      ? gvariablesController.racc.add(ract2)
-                                      : gvariablesController.racc[1] = ract2;
-                                });
-                              }),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      ract2 == "Bet" ||
-                              ract2 == "Raise" ||
-                              ract2 == "Call" ||
-                              ract2 == "All-in"
-                          ? SizedBox(
-                              width: 100,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: "montant",
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: rjour1,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "joueur",
+                                      textAlign: TextAlign.center,
                                     ),
-                                  ),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
-                                ),
-                                onChanged: (value) {
-                                  _onChangeHandler(
-                                    value,
-                                    gvariablesController.rmonn,
-                                  );
-                                },
+                                    items: gvariablesController.turnOne
+                                        .toSet()
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        rjour1 = noo.toString();
+                                        gvariablesController.rjuu.isEmpty
+                                            ? gvariablesController.rjuu
+                                                .add(rjour1)
+                                            : gvariablesController.rjuu[0] =
+                                                rjour1;
+                                      });
+                                    }),
                               ),
-                            )
-                          : const SizedBox.shrink(),
-                    ],
-                  ),
-                ),
-              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: ract1,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "Actions",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: <String>["Check", "Bet", "All-in"]
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        ract1 = noo.toString();
+                                        ract1 == "Check"
+                                            ? gvariablesController.rmonn.isEmpty
+                                                ? gvariablesController.rmonn
+                                                    .add("")
+                                                : gvariablesController
+                                                    .rmonn[0] = ""
+                                            // : gvariablesController.rmonn.removeWhere(
+                                            //     (value) => [""].contains(value));
+                                            : null;
+                                        gvariablesController.racc.isEmpty
+                                            ? gvariablesController.racc
+                                                .add(ract1)
+                                            : gvariablesController.racc[0] =
+                                                ract1;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            ract1 == "Bet" || ract1 == "All-in"
+                                ? SizedBox(
+                                    width: 100,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "montant",
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                      ),
+                                      onChanged: (value) {
+                                        _onChangeHandler(
+                                          value,
+                                          gvariablesController.rmonn,
+                                          "4f",
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            const Text(
+                              " , ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: rjour2,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "joueur",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: gvariablesController.turnOne
+                                        .toSet()
+                                        .map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        rjour2 = noo.toString();
+                                        gvariablesController.rjuu.length < 2
+                                            ? gvariablesController.rjuu
+                                                .add(rjour2)
+                                            : gvariablesController.rjuu[1] =
+                                                rjour2;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                    alignment: Alignment.center,
+                                    value: ract2,
+                                    icon: const Visibility(
+                                        visible: false,
+                                        child: Icon(Icons.arrow_downward)),
+                                    hint: const Text(
+                                      "Actions",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    items: <String>[
+                                      "Check",
+                                      "Bet",
+                                      "Raise",
+                                      "Call",
+                                      "Fold",
+                                      "All-in"
+                                    ].map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (noo) {
+                                      setState(() {
+                                        ract2 = noo.toString();
+                                        ract2 == act || ract2 == "Check"
+                                            ? gvariablesController
+                                                        .rmonn.length <
+                                                    2
+                                                ? gvariablesController.rmonn
+                                                    .add("")
+                                                : gvariablesController
+                                                    .rmonn[1] = ""
+                                            // : gvariablesController.rmonn.removeWhere(
+                                            //     (value) => [""].contains(value));
+                                            : null;
+                                        gvariablesController.racc.length < 2
+                                            ? gvariablesController.racc
+                                                .add(ract2)
+                                            : gvariablesController.racc[1] =
+                                                ract2;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            ract2 == "Bet" ||
+                                    ract2 == "Raise" ||
+                                    ract2 == "Call" ||
+                                    ract2 == "All-in"
+                                ? SizedBox(
+                                    width: 100,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "montant",
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                      ),
+                                      onChanged: (value) {
+                                        _onChangeHandler(
+                                          value,
+                                          gvariablesController.rmonn,
+                                          "fl",
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
+                      ),
+                    ),
               const SizedBox(height: 5),
               SizedBox(
                 child: ListView.builder(
@@ -2204,44 +2397,49 @@ class _CreateSituationState extends State<CreateSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              addButton(frn),
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isFinished = true;
-                    });
-                    customAlertDialoge(
-                        context,
-                        "Info",
-                        "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-                        "OK");
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                    // print(sample1);
-                  },
-                  child: Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 248, 58, 58),
+              !x3 ? const SizedBox.shrink() : addButton(frn),
+              // !x3
+              //     ? const SizedBox.shrink()
+              //     : Align(
+              //         alignment: Alignment.topRight,
+              //         child: InkWell(
+              //           onTap: () {
+              //             setState(() {
+              //               isFinished = true;
+              //             });
+              //             customAlertDialoge(
+              //                 context,
+              //                 "Info",
+              //                 "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
+              //                 "OK");
+              //             _controller
+              //                 .jumpTo(_controller.position.maxScrollExtent);
+              //             // print(sample1);
+              //           },
+              //           child: Container(
+              //             height: 20,
+              //             decoration: const BoxDecoration(
+              //               color: Color.fromARGB(255, 248, 58, 58),
+              //             ),
+              //             child: const Text(
+              //               " Fin du coup ",
+              //               style: TextStyle(
+              //                 // fontSize: 27,
+              //                 fontWeight: FontWeight.w600,
+              //                 color: Colors.white,
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              !x3 ? const SizedBox.shrink() : const SizedBox(height: 10),
+              !x3
+                  ? const SizedBox.shrink()
+                  : Container(
+                      width: MediaQuery.of(context).size.width * .75,
+                      color: Colors.black,
+                      height: 2,
                     ),
-                    child: const Text(
-                      " Fin du coup ",
-                      style: TextStyle(
-                        // fontSize: 27,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * .75,
-                color: Colors.black,
-                height: 2,
-              ),
               const SizedBox(
                 height: 10,
               ),
@@ -2273,95 +2471,97 @@ class _CreateSituationState extends State<CreateSituation> {
                 ),
               ),
               InkWell(
-                onTap: isFinished
-                    ? () {
-                        situationPost(
-                          title.text,
-                          game!,
-                          no!,
-                          sb.text,
-                          bb.text,
-                          position!,
-                          stackController.text,
-                          pot1 ?? "",
-                          pot2 ?? "",
-                          pot3 ?? "",
-                          test,
-                          sample1,
-                          sample2,
-                          sample3,
-                          comm,
-                          like,
-                          note.text,
-                          gvariablesController.prejuu,
-                          gvariablesController.preacc,
-                          gvariablesController.premonn,
-                          gvariablesController.fjuu,
-                          gvariablesController.facc,
-                          gvariablesController.fmonn,
-                          gvariablesController.tjuu,
-                          gvariablesController.tacc,
-                          gvariablesController.tmonn,
-                          gvariablesController.rjuu,
-                          gvariablesController.racc,
-                          gvariablesController.rmonn,
-                          auth.currentUser!.uid,
-                        );
-                      }
-                    : () {
-                        final isValid = titlekey.currentState!.validate();
-                        final valid = jeukey.currentState!.validate();
-                        if (isValid &&
-                            valid &&
-                            prejour1 != null &&
-                            prejour2 != null &&
-                            fjour1 != null &&
-                            fjour2 != null &&
-                            tjour1 != null &&
-                            tjour2 != null &&
-                            rjour1 != null &&
-                            rjour2 != null) {
-                          situationPost(
-                            title.text,
-                            game!,
-                            no!,
-                            sb.text,
-                            bb.text,
-                            position!,
-                            stackController.text,
-                            pot1 ?? "",
-                            pot2 ?? "",
-                            pot3 ?? "",
-                            test,
-                            sample1,
-                            sample2,
-                            sample3,
-                            comm,
-                            like,
-                            note.text,
-                            gvariablesController.prejuu,
-                            gvariablesController.preacc,
-                            gvariablesController.premonn,
-                            gvariablesController.fjuu,
-                            gvariablesController.facc,
-                            gvariablesController.fmonn,
-                            gvariablesController.tjuu,
-                            gvariablesController.tacc,
-                            gvariablesController.tmonn,
-                            gvariablesController.rjuu,
-                            gvariablesController.racc,
-                            gvariablesController.rmonn,
-                            auth.currentUser!.uid,
-                          );
-                        } else {
-                          customAlertDialoge(
-                            context,
-                            "Sorry",
-                            "Plz fill all the fields",
-                            "ok",
-                          );
-                        }
-                      },
+                onTap:
+                    //  isFinished
+                    () {
+                  situationPost(
+                    title.text,
+                    game!,
+                    no!,
+                    sb.text,
+                    bb.text,
+                    position!,
+                    stackController.text,
+                    pot1 ?? "",
+                    pot2 ?? "",
+                    pot3 ?? "",
+                    test,
+                    sample1,
+                    sample2,
+                    sample3,
+                    comm,
+                    like,
+                    note.text,
+                    gvariablesController.prejuu,
+                    gvariablesController.preacc,
+                    gvariablesController.premonn,
+                    gvariablesController.fjuu,
+                    gvariablesController.facc,
+                    gvariablesController.fmonn,
+                    gvariablesController.tjuu,
+                    gvariablesController.tacc,
+                    gvariablesController.tmonn,
+                    gvariablesController.rjuu,
+                    gvariablesController.racc,
+                    gvariablesController.rmonn,
+                    auth.currentUser!.uid,
+                  );
+                },
+                // : () {
+                //     final isValid = titlekey.currentState!.validate();
+                //     final valid = jeukey.currentState!.validate();
+                //     if (isValid &&
+                //         valid &&
+                //         prejour1 != null &&
+                //         prejour2 != null &&
+                //         fjour1 != null &&
+                //         fjour2 != null &&
+                //         tjour1 != null &&
+                //         tjour2 != null &&
+                //         rjour1 != null &&
+                //         rjour2 != null) {
+                //       situationPost(
+                //         title.text,
+                //         game!,
+                //         no!,
+                //         sb.text,
+                //         bb.text,
+                //         position!,
+                //         stackController.text,
+                //         pot1 ?? "",
+                //         pot2 ?? "",
+                //         pot3 ?? "",
+                //         test,
+                //         sample1,
+                //         sample2,
+                //         sample3,
+                //         comm,
+                //         like,
+                //         note.text,
+                //         gvariablesController.prejuu,
+                //         gvariablesController.preacc,
+                //         gvariablesController.premonn,
+                //         gvariablesController.fjuu,
+                //         gvariablesController.facc,
+                //         gvariablesController.fmonn,
+                //         gvariablesController.tjuu,
+                //         gvariablesController.tacc,
+                //         gvariablesController.tmonn,
+                //         gvariablesController.rjuu,
+                //         gvariablesController.racc,
+                //         gvariablesController.rmonn,
+                //         auth.currentUser!.uid,
+                //       );
+                //     } else {
+                //       customAlertDialoge(
+                //         context,
+                //         "Sorry",
+                //         "Plz fill all the fields",
+                //         "ok",
+                //       );
+                //     }
+                //   },
+
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(

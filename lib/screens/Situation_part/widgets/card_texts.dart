@@ -19,13 +19,13 @@ class CardTexts extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: GridView.builder(
-      itemCount: jourrr.length,
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 6,
-        mainAxisSpacing: 10,
-      ),
+        itemCount: jourrr.length,
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 6,
+          mainAxisSpacing: 10,
+        ),
         itemBuilder: (context, index) {
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -46,9 +46,10 @@ class CardTexts extends StatelessWidget {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  actiii[index] == "Fold" || actiii[index] == "Check"
-                      ? ""
-                      : monttt[index],
+                  // actiii[index] == "Fold" || actiii[index] == "Check"
+                  //     ? ""
+                  //     :
+                  monttt[index],
                   style: const TextStyle(
                     fontSize: 15,
                   ),
