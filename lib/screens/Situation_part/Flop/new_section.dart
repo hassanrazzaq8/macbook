@@ -10,11 +10,15 @@ class NewSection extends StatefulWidget {
     required this.turn,
     required this.jou,
     required this.index,
+    required this.isEdit,
+    this.snap,
   }) : super(key: key);
   final String count;
   final String turn;
   final List jou;
   final int index;
+  final bool isEdit;
+  final snap;
 
   @override
   State<NewSection> createState() => _NewSectionState();
@@ -53,6 +57,25 @@ class _NewSectionState extends State<NewSection> {
   }
 
   GvariablesController gc = Get.put(GvariablesController());
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      gc.prejuu.value = widget.snap["prejoueur"];
+      gc.preacc.value = widget.snap["preaction"];
+      gc.premonn.value = widget.snap["premontant"];
+      gc.fjuu.value = widget.snap["flopjoueur"] ?? [];
+      gc.facc.value = widget.snap["flopaction"] ?? [];
+      gc.fmonn.value = widget.snap["flopmontant"] ?? [];
+      gc.tjuu.value = widget.snap["turnjoueur"] ?? [];
+      gc.tacc.value = widget.snap["turnaction"] ?? [];
+      gc.tmonn.value = widget.snap["turnmontant"] ?? [];
+      gc.rjuu.value = widget.snap["riverjoueur"] ?? [];
+      gc.racc.value = widget.snap["riveraction"] ?? [];
+      gc.rmonn.value = widget.snap["rivermonatnt"] ?? [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return widget.turn != "1"
@@ -178,10 +201,12 @@ class _NewSectionState extends State<NewSection> {
                                             ? gc.tmonn.add("")
                                             : gc.tmonn[i] = ""
                                         : null
-                                    : action == "Fold" || action == "Check"
-                                        ? gc.rmonn.length <= i
-                                            ? gc.rmonn.add("")
-                                            : gc.rmonn[i] = ""
+                                    : widget.turn == "4"
+                                        ? action == "Fold" || action == "Check"
+                                            ? gc.rmonn.length <= i
+                                                ? gc.rmonn.add("")
+                                                : gc.rmonn[i] = ""
+                                            : null
                                         : null;
 
                             if (action == "Fold") {
@@ -230,7 +255,7 @@ class _NewSectionState extends State<NewSection> {
                                   value,
                                   gc.tmonn,
                                 );
-                              } else {
+                              } else if (widget.turn == "4") {
                                 _onChangeHandler(
                                   value,
                                   gc.rmonn,

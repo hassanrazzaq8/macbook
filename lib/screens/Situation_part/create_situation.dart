@@ -291,7 +291,9 @@ class _CreateSituationState extends State<CreateSituation> {
               ),
               // ElevatedButton(
               //   onPressed: () {
-
+              //     print("river joueur: ${gvariablesController.tjuu}");
+              //     print("river action: ${gvariablesController.tacc}");
+              //     print("river montant: ${gvariablesController.tmonn}");
               //   },
               //   child: const Text("data"),
               // ),
@@ -1220,7 +1222,7 @@ class _CreateSituationState extends State<CreateSituation> {
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            if (gvariablesController.prejuu.length == 2) {
+                            if (gvariablesController.prejuu.length >= 2) {
                               x1 = true;
                             } else {
                               customAlertDialoge(
@@ -1288,10 +1290,6 @@ class _CreateSituationState extends State<CreateSituation> {
                               onTap: () {
                                 setState(() {
                                   showCarts2 = !showCarts2;
-                                  // print(
-                                  //     "action ${gvariablesController.preacc}");
-                                  // print(
-                                  //     "montant ${gvariablesController.premonn}");
                                 });
                               },
                               child: Container(
@@ -1635,7 +1633,7 @@ class _CreateSituationState extends State<CreateSituation> {
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            if (gvariablesController.fjuu.length == 2) {
+                            if (gvariablesController.fjuu.length >= 2) {
                               x2 = true;
                             } else {
                               customAlertDialoge(
@@ -1707,7 +1705,13 @@ class _CreateSituationState extends State<CreateSituation> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  showCarts3 = !showCarts3;
+                                  // showCarts3 = !showCarts3;
+                                  print(
+                                      "river joueur: ${gvariablesController.rjuu}");
+                                  print(
+                                      "river action: ${gvariablesController.racc}");
+                                  print(
+                                      "river montant: ${gvariablesController.rmonn}");
                                 });
                               },
                               child: Container(
@@ -2049,7 +2053,7 @@ class _CreateSituationState extends State<CreateSituation> {
                           //
                           setState(() {
                             x3 = true;
-                            if (gvariablesController.tjuu.length == 2) {
+                            if (gvariablesController.tjuu.length >= 2) {
                               x1 = true;
                             } else {
                               customAlertDialoge(
@@ -2120,7 +2124,13 @@ class _CreateSituationState extends State<CreateSituation> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  showCarts4 = !showCarts4;
+                                  // showCarts4 = !showCarts4;
+                                  print(
+                                      "river joueur: ${gvariablesController.tjuu}");
+                                  print(
+                                      "river action: ${gvariablesController.tacc}");
+                                  print(
+                                      "river montant: ${gvariablesController.tmonn}");
                                   // print(total);
                                 });
                               },
@@ -2440,40 +2450,7 @@ class _CreateSituationState extends State<CreateSituation> {
               ),
               const SizedBox(height: 5),
               !x3 ? const SizedBox.shrink() : addButton(frn),
-              // !x3
-              //     ? const SizedBox.shrink()
-              //     : Align(
-              //         alignment: Alignment.topRight,
-              //         child: InkWell(
-              //           onTap: () {
-              //             setState(() {
-              //               isFinished = true;
-              //             });
-              //             customAlertDialoge(
-              //                 context,
-              //                 "Info",
-              //                 "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-              //                 "OK");
-              //             _controller
-              //                 .jumpTo(_controller.position.maxScrollExtent);
-              //             // print(sample1);
-              //           },
-              //           child: Container(
-              //             height: 20,
-              //             decoration: const BoxDecoration(
-              //               color: Color.fromARGB(255, 248, 58, 58),
-              //             ),
-              //             child: const Text(
-              //               " Fin du coup ",
-              //               style: TextStyle(
-              //                 // fontSize: 27,
-              //                 fontWeight: FontWeight.w600,
-              //                 color: Colors.white,
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
+
               !x3 ? const SizedBox.shrink() : const SizedBox(height: 10),
               !x3
                   ? const SizedBox.shrink()
@@ -2687,6 +2664,7 @@ class _CreateSituationState extends State<CreateSituation> {
             turn: turn,
             jou: par,
             index: i,
+            isEdit: false,
           )
         ],
       ),

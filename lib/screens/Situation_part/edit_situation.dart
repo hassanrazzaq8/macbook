@@ -1068,10 +1068,10 @@ class _EditSituationState extends State<EditSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              addButton(fn),
-              const SizedBox(
-                height: 15,
-              ),
+              // addButton(fn),
+              // const SizedBox(
+              //   height: 15,
+              // ),
               const SizedBox(height: 10),
               Container(
                 width: MediaQuery.of(context).size.width * .75,
@@ -1406,13 +1406,13 @@ class _EditSituationState extends State<EditSituation> {
                   },
                 ),
               ),
-              const SizedBox(height: 5),
-              widget.snap["flopjoueur"].isEmpty
-                  ? const SizedBox.shrink()
-                  : addButton(sn),
-              widget.snap["flopjoueur"].isEmpty
-                  ? const SizedBox.shrink()
-                  : const SizedBox(height: 10),
+              // const SizedBox(height: 5),
+              // widget.snap["flopjoueur"].isEmpty
+              //     ? const SizedBox.shrink()
+              //     : addButton(sn),
+              // widget.snap["flopjoueur"].isEmpty
+              //     ? const SizedBox.shrink()
+              //     : const SizedBox(height: 10),
               widget.snap["flopjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : Container(
@@ -1752,12 +1752,12 @@ class _EditSituationState extends State<EditSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              widget.snap["turnjoueur"].isEmpty
-                  ? const SizedBox.shrink()
-                  : addButton(tn),
-              widget.snap["turnjoueur"].isEmpty
-                  ? const SizedBox.shrink()
-                  : const SizedBox(height: 10),
+              // widget.snap["turnjoueur"].isEmpty
+              //     ? const SizedBox.shrink()
+              //     : addButton(tn),
+              // widget.snap["turnjoueur"].isEmpty
+              //     ? const SizedBox.shrink()
+              //     : const SizedBox(height: 10),
               widget.snap["turnjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : Container(
@@ -2098,12 +2098,12 @@ class _EditSituationState extends State<EditSituation> {
                 ),
               ),
               const SizedBox(height: 5),
-              widget.snap["riverjoueur"].isEmpty
-                  ? const SizedBox.shrink()
-                  : addButton(frn),
-              widget.snap["riverjoueur"].isEmpty
-                  ? const SizedBox.shrink()
-                  : const SizedBox(height: 10),
+              // widget.snap["riverjoueur"].isEmpty
+              //     ? const SizedBox.shrink()
+              //     : addButton(frn),
+              // widget.snap["riverjoueur"].isEmpty
+              //     ? const SizedBox.shrink()
+              //     : const SizedBox(height: 10),
               widget.snap["riverjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : Container(
@@ -2222,6 +2222,8 @@ class _EditSituationState extends State<EditSituation> {
             turn: turn,
             jou: par,
             index: i,
+            isEdit: true,
+            snap: widget.snap,
           )
         ],
       ),

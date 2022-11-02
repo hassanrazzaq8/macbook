@@ -32,10 +32,10 @@ class _EditNewSectionState extends State<EditNewSection> {
       j8 = ["BTN", "SB", "BB", "UTG", "UTG1", "MP", "HJ", "CO"],
       j9 = ["BTN", "SB", "BB", "UTG", "UTG1", "UTG2", "MP", "HJ", "CO"],
       j10 = ["BTN", "SB", "BB", "UTG", "UTG1", "UTG2", "MP", "MP1", "HJ", "CO"];
-  String? joueur, action, montain;
+  // String? joueur, action, montain;
   Timer? searchOnStoppedTyping;
 
-  _onChangeHandler(value, List list) {
+  _onChangeHandler(value, List list, int index) {
     const duration = Duration(
       milliseconds: 1000,
     );
@@ -44,13 +44,12 @@ class _EditNewSectionState extends State<EditNewSection> {
       setState(() => searchOnStoppedTyping!.cancel()); // clear timer
     }
 
-    setState(() =>
-        searchOnStoppedTyping = Timer(duration, () => search(value, list)));
+    setState(() => searchOnStoppedTyping =
+        Timer(duration, () => search(value, list, index)));
   }
 
-  search(value, List h) {
+  search(value, List h, int i) {
     print('hello world from search . the value is $value');
-    int i = widget.index + 2;
     h[i] = value;
   }
 
@@ -76,6 +75,7 @@ class _EditNewSectionState extends State<EditNewSection> {
   Widget build(BuildContext context) {
     return widget.turn != "1"
         ? GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: widget.turn == "2"
                 ? widget.snap["flopjoueur"].length - 2
                 : widget.turn == "3"
@@ -83,7 +83,7 @@ class _EditNewSectionState extends State<EditNewSection> {
                     : widget.snap["riverjoueur"].length - 2,
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 1,
               childAspectRatio: 6,
               mainAxisSpacing: 10,
             ),
@@ -109,18 +109,22 @@ class _EditNewSectionState extends State<EditNewSection> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                             alignment: Alignment.center,
-                            value: joueur,
+                            value: widget.turn == "2"
+                                ? widget.snap["flopjoueur"][i]
+                                : widget.turn == "3"
+                                    ? widget.snap["turnjoueur"][i]
+                                    : widget.snap["riverjoueur"][i],
                             icon: const Visibility(
                                 visible: false,
                                 child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.turn == "2"
-                                  ? widget.snap["flopjoueur"][i]
-                                  : widget.turn == "3"
-                                      ? widget.snap["turnjoueur"][i]
-                                      : widget.snap["riverjoueur"][i],
-                              textAlign: TextAlign.center,
-                            ),
+                            // hint: Text(
+                            //   widget.turn == "2"
+                            //       ? widget.snap["flopjoueur"][i]
+                            //       : widget.turn == "3"
+                            //           ? widget.snap["turnjoueur"][i]
+                            //           : widget.snap["riverjoueur"][i],
+                            //   textAlign: TextAlign.center,
+                            // ),
                             items: widget.turn == "2"
                                 ? gc.fjuu.toSet().map((value) {
                                     return DropdownMenuItem(
@@ -143,13 +147,19 @@ class _EditNewSectionState extends State<EditNewSection> {
                                       }).toList(),
                             onChanged: (noo) {
                               setState(() {
-                                joueur = noo.toString();
-                                int i = widget.index + 2;
                                 widget.turn == "2"
-                                    ? gc.fjuu[i] = joueur
+                                    ? widget.snap["flopjoueur"][i] =
+                                        noo.toString()
                                     : widget.turn == "3"
-                                        ? gc.tjuu[i] = joueur
-                                        : gc.rjuu[i] = joueur;
+                                        ? widget.snap["turnjoueur"][i] =
+                                            noo.toString()
+                                        : widget.snap["riverjoueur"][i] =
+                                            noo.toString();
+                                // widget.turn == "2"
+                                //     ? gc.fjuu[i] = joueur
+                                //     : widget.turn == "3"
+                                //         ? gc.tjuu[i] = joueur
+                                //         : gc.rjuu[i] = joueur;
                               });
                             }),
                       ),
@@ -164,18 +174,22 @@ class _EditNewSectionState extends State<EditNewSection> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                             alignment: Alignment.center,
-                            value: action,
+                            value: widget.turn == "2"
+                                ? widget.snap["flopaction"][i]
+                                : widget.turn == "3"
+                                    ? widget.snap["turnaction"][i]
+                                    : widget.snap["riveraction"][i],
                             icon: const Visibility(
                                 visible: false,
                                 child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.turn == "2"
-                                  ? widget.snap["flopaction"][i]
-                                  : widget.turn == "3"
-                                      ? widget.snap["turnaction"][i]
-                                      : widget.snap["riveraction"][i],
-                              textAlign: TextAlign.center,
-                            ),
+                            // hint: Text(
+                            //   widget.turn == "2"
+                            //       ? widget.snap["flopaction"][i]
+                            //       : widget.turn == "3"
+                            //           ? widget.snap["turnaction"][i]
+                            //           : widget.snap["riveraction"][i],
+                            //   textAlign: TextAlign.center,
+                            // ),
                             items: <String>[
                               "Check",
                               "Bet",
@@ -191,41 +205,37 @@ class _EditNewSectionState extends State<EditNewSection> {
                             }).toList(),
                             onChanged: (noo) {
                               setState(() {
-                                int i = widget.index + 2;
-                                action = noo.toString();
                                 widget.turn == "2"
-                                    ? action == "Fold" || action == "Check"
+                                    ? widget.snap["flopaction"][i] =
+                                        noo.toString()
+                                    : widget.turn == "3"
+                                        ? widget.snap["turnaction"][i] =
+                                            noo.toString()
+                                        : widget.snap["riveraction"][i] =
+                                            noo.toString();
+                                widget.turn == "2"
+                                    ? widget.snap["flopaction"][i] == "Fold" ||
+                                            widget.snap["flopaction"][i] ==
+                                                "Check"
                                         ? gc.fmonn[i] = ""
                                         // : gc.fmonn.removeWhere(
                                         //     (value) => [""].contains(value))
                                         : null
                                     : widget.turn == "3"
-                                        ? action == "Fold" || action == "Check"
+                                        ? widget.snap["turnaction"][i] ==
+                                                    "Fold" ||
+                                                widget.snap["turnaction"][i] ==
+                                                    "Check"
                                             ? gc.tmonn[i] = ""
                                             : null
                                         // : gc.tmonn.removeWhere(
                                         //     (value) => [""].contains(value))
-                                        : action == "Fold" || action == "Check"
+                                        : widget.snap["riveraction"][i] ==
+                                                    "Fold" ||
+                                                widget.snap["riveraction"][i] ==
+                                                    "Check"
                                             ? gc.rmonn[i] = ""
                                             : null;
-                                // : gc.rmonn.removeWhere(
-                                //     (value) => [""].contains(value));
-                                widget.turn == "2"
-                                    ? gc.facc[i] = action
-                                    : widget.turn == "3"
-                                        ? gc.tacc[i] = action
-                                        : gc.racc[i] = action;
-
-                                if (action == "Fold") {
-                                  if (widget.turn == "2" &&
-                                      gc.flopOne.contains(joueur)) {
-                                    gc.flopOne.remove(joueur);
-                                  }
-                                  if (widget.turn == "3" &&
-                                      gc.turnOne.contains(joueur)) {
-                                    gc.turnOne.remove(joueur);
-                                  }
-                                }
                               });
                             }),
                       ),
@@ -259,16 +269,19 @@ class _EditNewSectionState extends State<EditNewSection> {
                                         _onChangeHandler(
                                           value,
                                           gc.fmonn,
+                                          i,
                                         );
                                       } else if (widget.turn == "3") {
                                         _onChangeHandler(
                                           value,
                                           gc.tmonn,
+                                          i,
                                         );
                                       } else {
                                         _onChangeHandler(
                                           value,
                                           gc.rmonn,
+                                          i,
                                         );
                                       }
                                     }),
@@ -303,16 +316,19 @@ class _EditNewSectionState extends State<EditNewSection> {
                                             _onChangeHandler(
                                               value,
                                               gc.fmonn,
+                                              i,
                                             );
                                           } else if (widget.turn == "3") {
                                             _onChangeHandler(
                                               value,
                                               gc.tmonn,
+                                              i,
                                             );
                                           } else {
                                             _onChangeHandler(
                                               value,
                                               gc.rmonn,
+                                              i,
                                             );
                                           }
                                         }),
@@ -346,16 +362,19 @@ class _EditNewSectionState extends State<EditNewSection> {
                                             _onChangeHandler(
                                               value,
                                               gc.fmonn,
+                                              i,
                                             );
                                           } else if (widget.turn == "3") {
                                             _onChangeHandler(
                                               value,
                                               gc.tmonn,
+                                              i,
                                             );
                                           } else {
                                             _onChangeHandler(
                                               value,
                                               gc.rmonn,
+                                              i,
                                             );
                                           }
                                         }),
@@ -366,10 +385,11 @@ class _EditNewSectionState extends State<EditNewSection> {
               );
             })
         : GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: widget.snap["prejoueur"].length - 2,
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 1,
               childAspectRatio: 6,
               mainAxisSpacing: 20,
             ),
@@ -388,14 +408,14 @@ class _EditNewSectionState extends State<EditNewSection> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                             alignment: Alignment.center,
-                            value: joueur,
+                            value: widget.snap["prejoueur"][i],
                             icon: const Visibility(
                                 visible: false,
                                 child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["prejoueur"][i],
-                              textAlign: TextAlign.center,
-                            ),
+                            // hint: Text(
+                            //   widget.snap["prejoueur"][i],
+                            //   textAlign: TextAlign.center,
+                            // ),
                             items: widget.count == "2"
                                 ? j2.map((value) {
                                     return DropdownMenuItem(
@@ -478,11 +498,11 @@ class _EditNewSectionState extends State<EditNewSection> {
                                                                   }).toList(),
                             onChanged: (noo) {
                               setState(() {
-                                joueur = noo.toString();
-                                int i = widget.index + 2;
-                                gc.prejuu.length <= i
-                                    ? gc.prejuu.add(joueur)
-                                    : gc.prejuu[i] = joueur;
+                                widget.snap["prejoueur"][i] = noo.toString();
+                                // int i = widget.index + 2;
+                                // gc.prejuu.length <= i
+                                //     ? gc.prejuu.add(joueur)
+                                //     : gc.prejuu[i] = joueur;
                               });
                             }),
                       ),
@@ -497,14 +517,14 @@ class _EditNewSectionState extends State<EditNewSection> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                             alignment: Alignment.center,
-                            value: action,
+                            value: widget.snap["preaction"][i],
                             icon: const Visibility(
                                 visible: false,
                                 child: Icon(Icons.arrow_downward)),
-                            hint: Text(
-                              widget.snap["preaction"][i],
-                              textAlign: TextAlign.center,
-                            ),
+                            // hint: Text(
+                            //   widget.snap["preaction"][i],
+                            //   textAlign: TextAlign.center,
+                            // ),
                             items: <String>["Raise", "Call", "All-in", "Fold"]
                                 .map((value) {
                               return DropdownMenuItem(
@@ -514,31 +534,33 @@ class _EditNewSectionState extends State<EditNewSection> {
                             }).toList(),
                             onChanged: (noo) {
                               setState(() {
-                                action = noo.toString();
-                                action == "Fold" ? gc.fmonn.add("") : null;
-                                // : gc.fmonn
-                                //     .removeWhere((value) => [""].contains(value));
-                                int i = widget.index + 2;
-                                gc.preacc.length <= i
-                                    ? gc.preacc.add(action)
-                                    : gc.preacc[i] = action;
-                                action != "Fold"
-                                    ? gc.globalOne.add(joueur)
+                                widget.snap["preaction"][i] = noo.toString();
+                                noo.toString() == "Fold"
+                                    ? widget.snap["premontant"][i] = ""
                                     : null;
+                                // // : gc.fmonn
+                                // //     .removeWhere((value) => [""].contains(value));
+                                // int i = widget.index + 2;
+                                // gc.preacc.length <= i
+                                //     ? gc.preacc.add(action)
+                                //     : gc.preacc[i] = action;
+                                // action != "Fold"
+                                //     ? gc.globalOne.add(joueur)
+                                //     : null;
 
-                                if (action == "Fold" &&
-                                    gc.globalOne.contains(joueur)) {
-                                  gc.globalOne.remove(joueur);
-                                }
+                                // if (action == "Fold" &&
+                                //     gc.globalOne.contains(joueur)) {
+                                //   gc.globalOne.remove(joueur);
+                                // }
                               });
                             }),
                       ),
                     ),
                     const SizedBox(width: 5),
-                    widget.snap["preaction"][i] == "Bet" ||
+                    (widget.snap["preaction"][i] == "Bet" ||
                             widget.snap["preaction"][i] == "Raise" ||
                             widget.snap["preaction"][i] == "Call" ||
-                            widget.snap["preaction"][i] == "All-in"
+                            widget.snap["preaction"][i] == "All-in")
                         ? SizedBox(
                             width: 100,
                             child: TextField(
@@ -559,6 +581,7 @@ class _EditNewSectionState extends State<EditNewSection> {
                                   _onChangeHandler(
                                     value,
                                     gc.premonn,
+                                    i,
                                   );
                                 }),
                           )
