@@ -50,7 +50,25 @@ class _EditNewSectionState extends State<EditNewSection> {
 
   search(value, List h) {
     print('hello world from search . the value is $value');
-    h.add(value);
+    int i = widget.index + 2;
+    h[i] = value;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    gc.prejuu.value = widget.snap["prejoueur"];
+    gc.preacc.value = widget.snap["preaction"];
+    gc.premonn.value = widget.snap["premontant"];
+    gc.fjuu.value = widget.snap["flopjoueur"] ?? [];
+    gc.facc.value = widget.snap["flopaction"] ?? [];
+    gc.fmonn.value = widget.snap["flopmontant"] ?? [];
+    gc.tjuu.value = widget.snap["turnjoueur"] ?? [];
+    gc.tacc.value = widget.snap["turnaction"] ?? [];
+    gc.tmonn.value = widget.snap["turnmontant"] ?? [];
+    gc.rjuu.value = widget.snap["riverjoueur"] ?? [];
+    gc.racc.value = widget.snap["riveraction"] ?? [];
+    gc.rmonn.value = widget.snap["rivermonatnt"] ?? [];
   }
 
   GvariablesController gc = Get.put(GvariablesController());
@@ -104,20 +122,20 @@ class _EditNewSectionState extends State<EditNewSection> {
                               textAlign: TextAlign.center,
                             ),
                             items: widget.turn == "2"
-                                ? gc.globalOne.toSet().map((value) {
+                                ? gc.fjuu.toSet().map((value) {
                                     return DropdownMenuItem(
                                       value: value,
                                       child: Text(value),
                                     );
                                   }).toList()
                                 : widget.turn == "3"
-                                    ? gc.flopOne.toSet().map((value) {
+                                    ? gc.tjuu.toSet().map((value) {
                                         return DropdownMenuItem(
                                           value: value,
                                           child: Text(value),
                                         );
                                       }).toList()
-                                    : gc.turnOne.toSet().map((value) {
+                                    : gc.rjuu.toSet().map((value) {
                                         return DropdownMenuItem(
                                           value: value,
                                           child: Text(value),
@@ -128,16 +146,10 @@ class _EditNewSectionState extends State<EditNewSection> {
                                 joueur = noo.toString();
                                 int i = widget.index + 2;
                                 widget.turn == "2"
-                                    ? gc.fjuu.length <= i
-                                        ? gc.fjuu.add(joueur)
-                                        : gc.fjuu[i] = joueur
+                                    ? gc.fjuu[i] = joueur
                                     : widget.turn == "3"
-                                        ? gc.tjuu.length <= i
-                                            ? gc.tjuu.add(joueur)
-                                            : gc.tjuu[i] = joueur
-                                        : gc.rjuu.length <= i
-                                            ? gc.rjuu.add(joueur)
-                                            : gc.rjuu[i] = joueur;
+                                        ? gc.tjuu[i] = joueur
+                                        : gc.rjuu[i] = joueur;
                               });
                             }),
                       ),
@@ -179,43 +191,30 @@ class _EditNewSectionState extends State<EditNewSection> {
                             }).toList(),
                             onChanged: (noo) {
                               setState(() {
+                                int i = widget.index + 2;
                                 action = noo.toString();
                                 widget.turn == "2"
                                     ? action == "Fold" || action == "Check"
-                                        ? gc.fmonn.add("")
+                                        ? gc.fmonn[i] = ""
                                         // : gc.fmonn.removeWhere(
                                         //     (value) => [""].contains(value))
                                         : null
                                     : widget.turn == "3"
                                         ? action == "Fold" || action == "Check"
-                                            ? gc.tmonn.add("")
+                                            ? gc.tmonn[i] = ""
                                             : null
                                         // : gc.tmonn.removeWhere(
                                         //     (value) => [""].contains(value))
                                         : action == "Fold" || action == "Check"
-                                            ? gc.rmonn.add("")
+                                            ? gc.rmonn[i] = ""
                                             : null;
                                 // : gc.rmonn.removeWhere(
                                 //     (value) => [""].contains(value));
-                                int i = widget.index + 2;
                                 widget.turn == "2"
-                                    ? gc.facc.length <= i
-                                        ? gc.facc.add(action)
-                                        : gc.facc[i] = action
+                                    ? gc.facc[i] = action
                                     : widget.turn == "3"
-                                        ? gc.tacc.length <= i
-                                            ? gc.tacc.add(action)
-                                            : gc.tacc[i] = action
-                                        : gc.racc.length <= i
-                                            ? gc.racc.add(action)
-                                            : gc.racc[i] = action;
-                                action != "Fold"
-                                    ? widget.turn == "2"
-                                        ? gc.flopOne.add(joueur)
-                                        : widget.turn == "3"
-                                            ? gc.turnOne.add(joueur)
-                                            : gc.riverOne.add(joueur)
-                                    : null;
+                                        ? gc.tacc[i] = action
+                                        : gc.racc[i] = action;
 
                                 if (action == "Fold") {
                                   if (widget.turn == "2" &&

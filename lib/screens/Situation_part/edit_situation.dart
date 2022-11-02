@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:card_app/screens/Situation_part/Flop/edit_new_section.dart';
+import 'package:card_app/screens/Situation_part/Flop/utills.dart';
 import 'package:card_app/screens/Situation_part/resources/store_to_firestor.dart';
 import 'package:card_app/screens/Situation_part/widgets/alertdialoge.dart';
 import 'package:card_app/widgets/utills.dart';
@@ -23,6 +26,7 @@ class _EditSituationState extends State<EditSituation> {
   TextEditingController note = TextEditingController();
   final titlekey = GlobalKey<FormState>();
   final jeukey = GlobalKey<FormState>();
+  GvariablesController gv = Get.put(GvariablesController());
   String? game;
   String? no;
   String? mode;
@@ -94,6 +98,21 @@ class _EditSituationState extends State<EditSituation> {
     List tCarts = fn.isEmpty ? data["TurnCardValue"] : fn;
     List rCarts = fn.isEmpty ? data["RiverCardValue"] : fn;
     String not = note.text.isEmpty ? data["note"] : note.text;
+    String p1 = pot1 ?? data["flopPot"];
+    String p2 = pot1 ?? data["turnPot"];
+    String p3 = pot1 ?? data["riverPot"];
+    List prej = List.from(gv.prejuu);
+    List prea = List.from(gv.preacc);
+    List prem = List.from(gv.premonn);
+    List fj = List.from(gv.fjuu);
+    List fa = List.from(gv.facc);
+    List fm = List.from(gv.fmonn);
+    List tj = List.from(gv.tjuu);
+    List ta = List.from(gv.tacc);
+    List tm = List.from(gv.tmonn);
+    List rj = List.from(gv.rjuu);
+    List ra = List.from(gv.racc);
+    List rm = List.from(gv.rmonn);
     setState(() {
       isUpdating = true;
     });
@@ -113,7 +132,22 @@ class _EditSituationState extends State<EditSituation> {
       "FlopCardValue": fCarts,
       "TurnCardValue": tCarts,
       "RiverCardValue": rCarts,
-      "Note": not,
+      "Note": note.text,
+      "flopPot": p1,
+      "turnPot": p2,
+      "riverPot": p3,
+      "prejoueur": prej,
+      "preaction": prea,
+      "premontant": prem,
+      "flopjoueur": fj,
+      "flopaction": fa,
+      "flopmontant": fm,
+      "turnjoueur": tj,
+      "turnaction": ta,
+      "turnmontant": tm,
+      "riverjoueur": rj,
+      "riveraction": ra,
+      "rivermonatnt": rm,
     });
     setState(() {
       isUpdating = false;
@@ -132,7 +166,44 @@ class _EditSituationState extends State<EditSituation> {
   @override
   void initState() {
     super.initState();
+
     no = widget.snap["noOfPlayers"];
+    note.text = widget.snap["Note"];
+    gv.prejuu.value = widget.snap["prejoueur"];
+    gv.preacc.value = widget.snap["preaction"];
+    gv.premonn.value = widget.snap["premontant"];
+    gv.fjuu.value = widget.snap["flopjoueur"] ?? [];
+    gv.facc.value = widget.snap["flopaction"] ?? [];
+    gv.fmonn.value = widget.snap["flopmontant"] ?? [];
+    gv.tjuu.value = widget.snap["turnjoueur"] ?? [];
+    gv.tacc.value = widget.snap["turnaction"] ?? [];
+    gv.tmonn.value = widget.snap["turnmontant"] ?? [];
+    gv.rjuu.value = widget.snap["riverjoueur"] ?? [];
+    gv.racc.value = widget.snap["riveraction"] ?? [];
+    gv.rmonn.value = widget.snap["rivermonatnt"] ?? [];
+  }
+
+  Timer? searchOnStoppedTyping;
+  _onChangeHandler(value, List list, String turn) {
+    const duration = Duration(
+      milliseconds: 1000,
+    );
+
+    if (searchOnStoppedTyping != null) {
+      setState(() => searchOnStoppedTyping!.cancel()); // clear timer
+    }
+
+    setState(() =>
+        searchOnStoppedTyping = Timer(duration, () => add(value, list, turn)));
+  }
+
+  add(value, List h, String turn) {
+    print('hello world from search . the value is $value');
+    turn == "1f" || turn == "2f" || turn == "3f" || turn == "4f"
+        ? h[0] = value
+        : turn == "1l" || turn == "2l" || turn == "3l" || turn == "4l"
+            ? h[1] = value
+            : null;
   }
 
   @override
@@ -733,6 +804,9 @@ class _EditSituationState extends State<EditSituation> {
                               setState(() {
                                 prejour1 = noo.toString();
                                 par.add(prejour1);
+                                print("object${gv.prejuu}");
+                                print("object${prejour1}");
+                                gv.prejuu[0] = prejour1;
                               });
                             }),
                       ),
@@ -756,7 +830,7 @@ class _EditSituationState extends State<EditSituation> {
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
-                            items: <String>["Raise", "Check", "All-in"]
+                            items: <String>["Raise", "Call", "All-in"]
                                 .map((value) {
                               return DropdownMenuItem(
                                 value: value,
@@ -766,32 +840,37 @@ class _EditSituationState extends State<EditSituation> {
                             onChanged: (noo) {
                               setState(() {
                                 preact1 = noo.toString();
+                                gv.preacc[0] = preact1;
                               });
                             }),
                       ),
                     ),
                     const SizedBox(width: 5),
-                    SizedBox(
-                      width: 100,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: widget.snap["premontant"][0],
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            premont1 = value;
-                          });
-                        },
-                      ),
-                    ),
+                    gv.preacc[0] == "Bet" ||
+                            gv.preacc[0] == "Raise" ||
+                            gv.preacc[0] == "Call" ||
+                            gv.preacc[0] == "All-in"
+                        ? SizedBox(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                hintText: widget.snap["premontant"][0],
+                                hintStyle: const TextStyle(color: Colors.black),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              onChanged: (value) {
+                                _onChangeHandler(value, gv.premonn, "1f");
+                              },
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                     const Text(
                       " , ",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -883,6 +962,7 @@ class _EditSituationState extends State<EditSituation> {
                             onChanged: (noo) {
                               setState(() {
                                 prejour2 = noo.toString();
+                                gv.prejuu[1] = prejour2;
                               });
                             }),
                       ),
@@ -916,6 +996,8 @@ class _EditSituationState extends State<EditSituation> {
                             onChanged: (noo) {
                               setState(() {
                                 preact2 = noo.toString();
+                                gv.preacc[1] = preact2;
+                                preact2 == "Fold" ? gv.premonn[1] = "" : null;
                                 // preact2 != act ? par.add(prejour2) : null;
                                 if (preact2 != act) {
                                   if (prejour1 == prejour2) {
@@ -929,10 +1011,11 @@ class _EditSituationState extends State<EditSituation> {
                       ),
                     ),
                     const SizedBox(width: 5),
-                    widget.snap["preaction"][1] == "Bet" ||
-                            widget.snap["preaction"][1] == "Raise" ||
-                            widget.snap["preaction"][1] == "Call" ||
-                            widget.snap["preaction"][1] == "All-in"
+                    (gv.preacc[1] == "Bet" ||
+                                gv.preacc[1] == "Raise" ||
+                                gv.preacc[1] == "Call" ||
+                                gv.preacc[1] == "All-in") &&
+                            (preact2 != "Fold")
                         ? SizedBox(
                             width: 100,
                             child: TextField(
@@ -951,9 +1034,7 @@ class _EditSituationState extends State<EditSituation> {
                                     const EdgeInsets.symmetric(horizontal: 10),
                               ),
                               onChanged: (value) {
-                                setState(() {
-                                  premont2 = value;
-                                });
+                                _onChangeHandler(value, gv.premonn, "1l");
                               },
                             ),
                           )
@@ -991,35 +1072,6 @@ class _EditSituationState extends State<EditSituation> {
               const SizedBox(
                 height: 15,
               ),
-              // Align(
-              //   alignment: Alignment.topRight,
-              //   child: InkWell(
-              //     onTap: () {
-              //       setState(() {
-              //         isFinished = true;
-              //       });
-              //       customAlertDialoge(
-              //           context,
-              //           "Info",
-              //           "Si vous le souchaitez vous pouvez ecrire une note : sur votre coup",
-              //           "OK");
-              //       _controller.jumpTo(_controller.position.maxScrollExtent);
-              //     },
-              //     child: Container(
-              //       height: 20,
-              //       decoration: const BoxDecoration(
-              //         color: Color.fromARGB(255, 248, 58, 58),
-              //       ),
-              //       child: const Text(
-              //         " Fin du coup ",
-              //         style: TextStyle(
-              //           fontWeight: FontWeight.w600,
-              //           color: Colors.white,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
               const SizedBox(height: 10),
               Container(
                 width: MediaQuery.of(context).size.width * .75,
@@ -1147,7 +1199,7 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       fjour1 = noo.toString();
-                                      // print
+                                      gv.fjuu[0] = fjour1;
                                     });
                                   }),
                             ),
@@ -1181,15 +1233,21 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       fact1 = noo.toString();
+                                      gv.facc[0] = fact1;
+                                      fact1 == "Check"
+                                          ? gv.fmonn[0] = ""
+                                          : null;
                                     });
                                   }),
                             ),
                           ),
                           const SizedBox(width: 5),
-                          widget.snap["flopaction"][0] == "Bet" ||
-                                  widget.snap["flopaction"][0] == "Raise" ||
-                                  widget.snap["flopaction"][0] == "Call" ||
-                                  widget.snap["flopaction"][0] == "All-in"
+                          (widget.snap["flopaction"][0] == "Bet" ||
+                                      widget.snap["flopaction"][0] == "Raise" ||
+                                      widget.snap["flopaction"][0] == "Call" ||
+                                      widget.snap["flopaction"][0] ==
+                                          "All-in") &&
+                                  (fact1 != "Check")
                               ? SizedBox(
                                   width: 100,
                                   child: TextField(
@@ -1209,9 +1267,7 @@ class _EditSituationState extends State<EditSituation> {
                                           EdgeInsets.symmetric(horizontal: 10),
                                     ),
                                     onChanged: (value) {
-                                      setState(() {
-                                        fmont1 = value;
-                                      });
+                                      _onChangeHandler(value, gv.fmonn, "2f");
                                     },
                                   ),
                                 )
@@ -1247,6 +1303,7 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       fjour2 = noo.toString();
+                                      gv.fjuu[1] = fjour2;
                                     });
                                   }),
                             ),
@@ -1286,8 +1343,12 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       fact2 = noo.toString();
+                                      gv.facc[1] = fact2;
                                       parf = List.from(par);
                                       fact2 == act ? parf.remove(fjour2) : null;
+                                      fact2 == "Check" || fact2 == "Fold"
+                                          ? gv.fmonn[1] = ""
+                                          : null;
                                     });
                                   }),
                             ),
@@ -1316,9 +1377,7 @@ class _EditSituationState extends State<EditSituation> {
                                           EdgeInsets.symmetric(horizontal: 10),
                                     ),
                                     onChanged: (value) {
-                                      setState(() {
-                                        fmont2 = value;
-                                      });
+                                      _onChangeHandler(value, gv.fmonn, "2l");
                                     },
                                   ),
                                 )
@@ -1351,7 +1410,6 @@ class _EditSituationState extends State<EditSituation> {
               widget.snap["flopjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : addButton(sn),
-
               widget.snap["flopjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : const SizedBox(height: 10),
@@ -1483,6 +1541,7 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       tjour1 = noo.toString();
+                                      gv.tjuu[0] = tjour1;
                                     });
                                   }),
                             ),
@@ -1516,15 +1575,21 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       tact1 = noo.toString();
+                                      gv.tacc[0] = tact1;
+                                      tact1 == "Check"
+                                          ? gv.tmonn[0] = "Check"
+                                          : null;
                                     });
                                   }),
                             ),
                           ),
                           const SizedBox(width: 5),
-                          widget.snap["turnaction"][0] == "Bet" ||
-                                  widget.snap["turnaction"][0] == "Raise" ||
-                                  widget.snap["turnaction"][0] == "Call" ||
-                                  widget.snap["turnaction"][0] == "All-in"
+                          (widget.snap["turnaction"][0] == "Bet" ||
+                                      widget.snap["turnaction"][0] == "Raise" ||
+                                      widget.snap["turnaction"][0] == "Call" ||
+                                      widget.snap["turnaction"][0] ==
+                                          "All-in") &&
+                                  (tact1 != "Check")
                               ? SizedBox(
                                   width: 100,
                                   child: TextField(
@@ -1544,9 +1609,7 @@ class _EditSituationState extends State<EditSituation> {
                                           EdgeInsets.symmetric(horizontal: 10),
                                     ),
                                     onChanged: (value) {
-                                      setState(() {
-                                        tmont1 = value;
-                                      });
+                                      _onChangeHandler(value, gv.tmonn, "3f");
                                     },
                                   ),
                                 )
@@ -1582,6 +1645,7 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       tjour2 = noo.toString();
+                                      gv.tjuu[1] = tjour2;
                                     });
                                   }),
                             ),
@@ -1621,17 +1685,23 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       tact2 = noo.toString();
+                                      gv.tacc[1] = tact2;
                                       part = List.from(parf);
                                       tact2 == act ? part.remove(tjour2) : null;
+                                      tact2 == "Check" || tact2 == "Fold"
+                                          ? gv.tmonn[1] = ""
+                                          : null;
                                     });
                                   }),
                             ),
                           ),
                           const SizedBox(width: 5),
-                          widget.snap["turnaction"][1] == "Bet" ||
-                                  widget.snap["turnaction"][1] == "Raise" ||
-                                  widget.snap["turnaction"][1] == "Call" ||
-                                  widget.snap["turnaction"][1] == "All-in"
+                          (widget.snap["turnaction"][1] == "Bet" ||
+                                      widget.snap["turnaction"][1] == "Raise" ||
+                                      widget.snap["turnaction"][1] == "Call" ||
+                                      widget.snap["turnaction"][1] ==
+                                          "All-in") &&
+                                  (tact2 == "Check" || tact2 == "Fold")
                               ? SizedBox(
                                   width: 100,
                                   child: TextField(
@@ -1652,9 +1722,7 @@ class _EditSituationState extends State<EditSituation> {
                                               horizontal: 10),
                                     ),
                                     onChanged: (value) {
-                                      setState(() {
-                                        tmont2 = value;
-                                      });
+                                      _onChangeHandler(value, gv.tmonn, "3l");
                                     },
                                   ),
                                 )
@@ -1687,7 +1755,6 @@ class _EditSituationState extends State<EditSituation> {
               widget.snap["turnjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : addButton(tn),
-
               widget.snap["turnjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : const SizedBox(height: 10),
@@ -1818,7 +1885,7 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       rjour1 = noo.toString();
-                                      // print
+                                      gv.rjuu[0] = rjour1;
                                     });
                                   }),
                             ),
@@ -1852,15 +1919,22 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       ract1 = noo.toString();
+                                      gv.racc[0] = ract1;
+                                      ract1 == "Check"
+                                          ? gv.rmonn[0] = ract1
+                                          : null;
                                     });
                                   }),
                             ),
                           ),
                           const SizedBox(width: 5),
-                          widget.snap["riveraction"][0] == "Bet" ||
-                                  widget.snap["riveraction"][0] == "Raise" ||
-                                  widget.snap["riveraction"][0] == "Call" ||
-                                  widget.snap["riveraction"][0] == "All-in"
+                          (widget.snap["riveraction"][0] == "Bet" ||
+                                      widget.snap["riveraction"][0] ==
+                                          "Raise" ||
+                                      widget.snap["riveraction"][0] == "Call" ||
+                                      widget.snap["riveraction"][0] ==
+                                          "All-in") &&
+                                  (ract1 == "Check")
                               ? SizedBox(
                                   width: 100,
                                   child: TextField(
@@ -1880,9 +1954,7 @@ class _EditSituationState extends State<EditSituation> {
                                           EdgeInsets.symmetric(horizontal: 10),
                                     ),
                                     onChanged: (value) {
-                                      setState(() {
-                                        rmont1 = value;
-                                      });
+                                      _onChangeHandler(value, gv.rmonn, "4f");
                                     },
                                   ),
                                 )
@@ -1918,6 +1990,7 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       rjour2 = noo.toString();
+                                      gv.rjuu[1] = rjour2;
                                     });
                                   }),
                             ),
@@ -1957,17 +2030,24 @@ class _EditSituationState extends State<EditSituation> {
                                   onChanged: (noo) {
                                     setState(() {
                                       ract2 = noo.toString();
+                                      gv.racc[1] = ract2;
                                       parv = List.from(part);
                                       ract2 == act ? parv.remove(rjour2) : null;
+                                      ract2 == "Check" || ract2 == "Fold"
+                                          ? gv.rmonn[1] = ""
+                                          : null;
                                     });
                                   }),
                             ),
                           ),
                           const SizedBox(width: 5),
-                          widget.snap["riveraction"][1] == "Bet" ||
-                                  widget.snap["riveraction"][1] == "Raise" ||
-                                  widget.snap["riveraction"][1] == "Call" ||
-                                  widget.snap["riveraction"][1] == "All-in"
+                          (widget.snap["riveraction"][1] == "Bet" ||
+                                      widget.snap["riveraction"][1] ==
+                                          "Raise" ||
+                                      widget.snap["riveraction"][1] == "Call" ||
+                                      widget.snap["riveraction"][1] ==
+                                          "All-in") &&
+                                  (ract2 == "Check" || ract2 == "Fold")
                               ? SizedBox(
                                   width: 100,
                                   child: TextField(
@@ -1988,9 +2068,7 @@ class _EditSituationState extends State<EditSituation> {
                                               horizontal: 10),
                                     ),
                                     onChanged: (value) {
-                                      setState(() {
-                                        rmont2 = value;
-                                      });
+                                      _onChangeHandler(value, gv.rmonn, "4l");
                                     },
                                   ),
                                 )
@@ -2023,7 +2101,6 @@ class _EditSituationState extends State<EditSituation> {
               widget.snap["riverjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : addButton(frn),
-
               widget.snap["riverjoueur"].isEmpty
                   ? const SizedBox.shrink()
                   : const SizedBox(height: 10),

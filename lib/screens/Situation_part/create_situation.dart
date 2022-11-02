@@ -755,7 +755,20 @@ class _CreateSituationState extends State<CreateSituation> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
-                      x4 = true;
+                      if (title.text.isNotEmpty &&
+                          game != null &&
+                          no != null &&
+                          position != null &&
+                          stackController.text.isNotEmpty) {
+                        x4 = true;
+                      } else {
+                        customAlertDialoge(
+                          context,
+                          "",
+                          "Veuillez compléter vos informations avant de raconter le coup",
+                          "ok",
+                        );
+                      }
                     });
                     // setState(() {
                     //   isFinished = true;
@@ -1207,7 +1220,16 @@ class _CreateSituationState extends State<CreateSituation> {
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            x1 = true;
+                            if (gvariablesController.prejuu.length == 2) {
+                              x1 = true;
+                            } else {
+                              customAlertDialoge(
+                                context,
+                                "",
+                                "Pensez à compléter l'action avant de voir le flop",
+                                "ok",
+                              );
+                            }
                           });
                           // setState(() {
                           //   isFinished = true;
@@ -1613,7 +1635,16 @@ class _CreateSituationState extends State<CreateSituation> {
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            x2 = true;
+                            if (gvariablesController.fjuu.length == 2) {
+                              x2 = true;
+                            } else {
+                              customAlertDialoge(
+                                context,
+                                "",
+                                " Pensez  a compléter l'action avant de voir la turn ",
+                                "ok",
+                              );
+                            }
                           });
                           // setState(() {
                           //   isFinished = true;
@@ -2015,8 +2046,19 @@ class _CreateSituationState extends State<CreateSituation> {
                       alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
+                          //
                           setState(() {
                             x3 = true;
+                            if (gvariablesController.tjuu.length == 2) {
+                              x1 = true;
+                            } else {
+                              customAlertDialoge(
+                                context,
+                                "",
+                                "Pensez  a compléter l'action avant de voir river",
+                                "ok",
+                              );
+                            }
                           });
                           // setState(() {
                           //   isFinished = true;
