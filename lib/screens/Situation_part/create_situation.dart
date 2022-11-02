@@ -900,17 +900,27 @@ class _CreateSituationState extends State<CreateSituation> {
                                                                             value),
                                                                       );
                                                                     }).toList()
-                                                                  : <String>[
-                                                                      ""
-                                                                    ].map(
-                                                                      (value) {
-                                                                      return DropdownMenuItem(
-                                                                        value:
-                                                                            value,
-                                                                        child: Text(
-                                                                            value),
-                                                                      );
-                                                                    }).toList(),
+                                                                  : no == "10"
+                                                                      ? j10.map(
+                                                                          (value) {
+                                                                          return DropdownMenuItem(
+                                                                            value:
+                                                                                value,
+                                                                            child:
+                                                                                Text(value),
+                                                                          );
+                                                                        }).toList()
+                                                                      : <String>[
+                                                                          ""
+                                                                        ].map(
+                                                                          (value) {
+                                                                          return DropdownMenuItem(
+                                                                            value:
+                                                                                value,
+                                                                            child:
+                                                                                Text(value),
+                                                                          );
+                                                                        }).toList(),
                                   onChanged: (noo) {
                                     setState(() {
                                       prejour1 = noo.toString();
@@ -1074,17 +1084,27 @@ class _CreateSituationState extends State<CreateSituation> {
                                                                             value),
                                                                       );
                                                                     }).toList()
-                                                                  : <String>[
-                                                                      ""
-                                                                    ].map(
-                                                                      (value) {
-                                                                      return DropdownMenuItem(
-                                                                        value:
-                                                                            value,
-                                                                        child: Text(
-                                                                            value),
-                                                                      );
-                                                                    }).toList(),
+                                                                  : no == "10"
+                                                                      ? j10.map(
+                                                                          (value) {
+                                                                          return DropdownMenuItem(
+                                                                            value:
+                                                                                value,
+                                                                            child:
+                                                                                Text(value),
+                                                                          );
+                                                                        }).toList()
+                                                                      : <String>[
+                                                                          ""
+                                                                        ].map(
+                                                                          (value) {
+                                                                          return DropdownMenuItem(
+                                                                            value:
+                                                                                value,
+                                                                            child:
+                                                                                Text(value),
+                                                                          );
+                                                                        }).toList(),
                                   onChanged: (noo) {
                                     setState(() {
                                       prejour2 = noo.toString();
@@ -1290,6 +1310,12 @@ class _CreateSituationState extends State<CreateSituation> {
                               onTap: () {
                                 setState(() {
                                   showCarts2 = !showCarts2;
+                                  // print(
+                                  //     "prejour ${gvariablesController.prejuu}");
+                                  // print(
+                                  //     "prejour ${gvariablesController.preacc}");
+                                  // print(
+                                  //     "prejour ${gvariablesController.premonn}");
                                 });
                               },
                               child: Container(
@@ -1705,13 +1731,13 @@ class _CreateSituationState extends State<CreateSituation> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  // showCarts3 = !showCarts3;
-                                  print(
-                                      "river joueur: ${gvariablesController.rjuu}");
-                                  print(
-                                      "river action: ${gvariablesController.racc}");
-                                  print(
-                                      "river montant: ${gvariablesController.rmonn}");
+                                  showCarts3 = !showCarts3;
+                                  // print(
+                                  //     "flop joueur: ${gvariablesController.fjuu}");
+                                  // print(
+                                  //     "flop action: ${gvariablesController.facc}");
+                                  // print(
+                                  //     "flop montant: ${gvariablesController.fmonn}");
                                 });
                               },
                               child: Container(
@@ -2124,13 +2150,13 @@ class _CreateSituationState extends State<CreateSituation> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  // showCarts4 = !showCarts4;
-                                  print(
-                                      "river joueur: ${gvariablesController.tjuu}");
-                                  print(
-                                      "river action: ${gvariablesController.tacc}");
-                                  print(
-                                      "river montant: ${gvariablesController.tmonn}");
+                                  showCarts4 = !showCarts4;
+                                  // print(
+                                  //     "river joueur: ${gvariablesController.tjuu}");
+                                  // print(
+                                  //     "river action: ${gvariablesController.tacc}");
+                                  // print(
+                                  //     "river montant: ${gvariablesController.tmonn}");
                                   // print(total);
                                 });
                               },
@@ -2493,38 +2519,47 @@ class _CreateSituationState extends State<CreateSituation> {
                 onTap:
                     //  isFinished
                     () {
-                  situationPost(
-                    title.text,
-                    game!,
-                    no!,
-                    sb.text,
-                    bb.text,
-                    position!,
-                    stackController.text,
-                    pot1 ?? "",
-                    pot2 ?? "",
-                    pot3 ?? "",
-                    test,
-                    sample1,
-                    sample2,
-                    sample3,
-                    comm,
-                    like,
-                    note.text,
-                    gvariablesController.prejuu,
-                    gvariablesController.preacc,
-                    gvariablesController.premonn,
-                    gvariablesController.fjuu,
-                    gvariablesController.facc,
-                    gvariablesController.fmonn,
-                    gvariablesController.tjuu,
-                    gvariablesController.tacc,
-                    gvariablesController.tmonn,
-                    gvariablesController.rjuu,
-                    gvariablesController.racc,
-                    gvariablesController.rmonn,
-                    auth.currentUser!.uid,
-                  );
+                  if (gvariablesController.prejuu.length >= 2) {
+                    situationPost(
+                      title.text,
+                      game!,
+                      no!,
+                      sb.text,
+                      bb.text,
+                      position!,
+                      stackController.text,
+                      pot1 ?? "",
+                      pot2 ?? "",
+                      pot3 ?? "",
+                      test,
+                      sample1,
+                      sample2,
+                      sample3,
+                      comm,
+                      like,
+                      note.text,
+                      gvariablesController.prejuu,
+                      gvariablesController.preacc,
+                      gvariablesController.premonn,
+                      gvariablesController.fjuu,
+                      gvariablesController.facc,
+                      gvariablesController.fmonn,
+                      gvariablesController.tjuu,
+                      gvariablesController.tacc,
+                      gvariablesController.tmonn,
+                      gvariablesController.rjuu,
+                      gvariablesController.racc,
+                      gvariablesController.rmonn,
+                      auth.currentUser!.uid,
+                    );
+                  } else {
+                    customAlertDialoge(
+                      context,
+                      "",
+                      "Vous devez compléter le coup avant de le valider",
+                      "ok",
+                    );
+                  }
                 },
                 // : () {
                 //     final isValid = titlekey.currentState!.validate();
@@ -2642,16 +2677,51 @@ class _CreateSituationState extends State<CreateSituation> {
             onPressed: () {
               setState(() {
                 list.removeLast();
-                // if (turn == "1") {
-
-                // }
-                // turn == "1"
-                // ? gvariablesController.globalOne.removeLast()
-                // : turn == "2"
-                //     ? gvariablesController.flopOne.removeLast()
-                //     : turn == "3"
-                //         ? gvariablesController.turnOne.removeLast()
-                //         : gvariablesController.riverOne.removeLast();
+                if (turn == "1") {
+                  int index = i + 3;
+                  gvariablesController.prejuu.length >= index
+                      ? gvariablesController.prejuu.removeLast()
+                      : null;
+                  gvariablesController.preacc.length >= index
+                      ? gvariablesController.preacc.removeLast()
+                      : null;
+                  gvariablesController.premonn.length >= index
+                      ? gvariablesController.premonn.removeLast()
+                      : null;
+                } else if (turn == "2") {
+                  int index = i + 3;
+                  gvariablesController.fjuu.length >= index
+                      ? gvariablesController.fjuu.removeLast()
+                      : null;
+                  gvariablesController.facc.length >= index
+                      ? gvariablesController.facc.removeLast()
+                      : null;
+                  gvariablesController.fmonn.length >= index
+                      ? gvariablesController.fmonn.removeLast()
+                      : null;
+                } else if (turn == "3") {
+                  int index = i + 3;
+                  gvariablesController.tjuu.length >= index
+                      ? gvariablesController.tjuu.removeLast()
+                      : null;
+                  gvariablesController.tacc.length >= index
+                      ? gvariablesController.tacc.removeLast()
+                      : null;
+                  gvariablesController.tmonn.length >= index
+                      ? gvariablesController.tmonn.removeLast()
+                      : null;
+                } else if (turn == "4") {
+                  int index = i + 3;
+                  gvariablesController.rjuu.length >= index
+                      ? gvariablesController.rjuu.removeLast()
+                      : null;
+                  gvariablesController.racc.length >= index
+                      ? gvariablesController.racc.removeLast()
+                      : null;
+                  gvariablesController.rmonn.length >= index
+                      ? gvariablesController.rmonn.removeLast()
+                      : null;
+                }
               });
             },
             icon: const Icon(

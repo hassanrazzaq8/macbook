@@ -67,6 +67,10 @@ class _EditSituationState extends State<EditSituation> {
     "3",
     "2"
   ];
+  List check1 = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+  List check2 = [20, 22, 23, 24, 25, 26, 27, 28, 29, 210, 211, 212, 213];
+  List check3 = [30, 32, 33, 34, 35, 36, 37, 38, 39, 310, 311, 312, 313];
+  List check4 = [40, 42, 43, 44, 45, 46, 47, 48, 49, 410, 411, 412, 413];
   List fn = [], sn = [], tn = [], frn = [];
   String? prejour1, prejour2, preact1, preact2, premont1, premont2;
   String? fjour1, fjour2, fact1, fact2, fmont1, fmont2;
@@ -792,14 +796,27 @@ class _EditSituationState extends State<EditSituation> {
                                                                       value),
                                                                 );
                                                               }).toList()
-                                                            : <String>[""]
-                                                                .map((value) {
-                                                                return DropdownMenuItem(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList(),
+                                                            : no == "10"
+                                                                ? j10.map(
+                                                                    (value) {
+                                                                    return DropdownMenuItem(
+                                                                      value:
+                                                                          value,
+                                                                      child: Text(
+                                                                          value),
+                                                                    );
+                                                                  }).toList()
+                                                                : <String>[
+                                                                    ""
+                                                                  ].map(
+                                                                    (value) {
+                                                                    return DropdownMenuItem(
+                                                                      value:
+                                                                          value,
+                                                                      child: Text(
+                                                                          value),
+                                                                    );
+                                                                  }).toList(),
                             onChanged: (noo) {
                               setState(() {
                                 prejour1 = noo.toString();
@@ -951,14 +968,27 @@ class _EditSituationState extends State<EditSituation> {
                                                                       value),
                                                                 );
                                                               }).toList()
-                                                            : <String>[""]
-                                                                .map((value) {
-                                                                return DropdownMenuItem(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList(),
+                                                            : no == "10"
+                                                                ? j10.map(
+                                                                    (value) {
+                                                                    return DropdownMenuItem(
+                                                                      value:
+                                                                          value,
+                                                                      child: Text(
+                                                                          value),
+                                                                    );
+                                                                  }).toList()
+                                                                : <String>[
+                                                                    ""
+                                                                  ].map(
+                                                                    (value) {
+                                                                    return DropdownMenuItem(
+                                                                      value:
+                                                                          value,
+                                                                      child: Text(
+                                                                          value),
+                                                                    );
+                                                                  }).toList(),
                             onChanged: (noo) {
                               setState(() {
                                 prejour2 = noo.toString();
@@ -2331,6 +2361,7 @@ class _EditSituationState extends State<EditSituation> {
         children: [
           Expanded(
             child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: counting.length,
@@ -2345,9 +2376,13 @@ class _EditSituationState extends State<EditSituation> {
                                 (value) => value["title"] == counting[index]);
                             final exists2 = total.where((value) =>
                                 value["image"] == "assets/pngegg (1).png");
+                            final exists3 = total.where(
+                                (value) => value["check"] == check1[index]);
                             setState(() {
                               if (h.length < length) {
-                                if (exists.isEmpty || exists2.isEmpty) {
+                                if (exists.isEmpty ||
+                                    exists2.isEmpty ||
+                                    exists3.isEmpty) {
                                   h.add({
                                     "title": counting[index],
                                     "image": "assets/pngegg (1).png",
@@ -2357,14 +2392,25 @@ class _EditSituationState extends State<EditSituation> {
                                     "title": counting[index],
                                     "image": "assets/pngegg (1).png",
                                     "color": Colors.red.value,
+                                    "check": check1[index],
                                   });
                                   turn == "1"
-                                      ? showCarts1 = false
+                                      ? h.length == 2
+                                          ? showCarts1 = !showCarts1
+                                          : null
                                       : turn == "2"
-                                          ? showCarts2 = false
+                                          ? h.length == 3
+                                              ? showCarts2 = !showCarts2
+                                              : null
                                           : turn == "3"
-                                              ? showCarts3 = false
-                                              : showCarts4 = false;
+                                              ? h.length == 1
+                                                  ? showCarts3 = !showCarts3
+                                                  : null
+                                              : turn == "4"
+                                                  ? h.length == 1
+                                                      ? showCarts4 = !showCarts4
+                                                      : null
+                                                  : null;
                                 } else {
                                   customAlertDialoge(context, "Sorry",
                                       "Card is already selected", "ok");
@@ -2414,6 +2460,7 @@ class _EditSituationState extends State<EditSituation> {
           ),
           Expanded(
             child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: counting.length,
@@ -2428,9 +2475,13 @@ class _EditSituationState extends State<EditSituation> {
                                 (value) => value["title"] == counting[index]);
                             final exists2 = total.where((value) =>
                                 value["image"] == "assets/pngegg (4).png");
+                            final exists3 = total.where(
+                                (value) => value["check"] == check2[index]);
                             setState(() {
                               if (h.length < length) {
-                                if (exists.isEmpty || exists2.isEmpty) {
+                                if (exists.isEmpty ||
+                                    exists2.isEmpty ||
+                                    exists3.isEmpty) {
                                   h.add({
                                     "title": counting[index],
                                     "image": "assets/pngegg (4).png",
@@ -2440,14 +2491,25 @@ class _EditSituationState extends State<EditSituation> {
                                     "title": counting[index],
                                     "image": "assets/pngegg (4).png",
                                     "color": Colors.red.value,
+                                    "check": check2[index],
                                   });
                                   turn == "1"
-                                      ? showCarts1 = false
+                                      ? h.length == 2
+                                          ? showCarts1 = !showCarts1
+                                          : null
                                       : turn == "2"
-                                          ? showCarts2 = false
+                                          ? h.length == 3
+                                              ? showCarts2 = !showCarts2
+                                              : null
                                           : turn == "3"
-                                              ? showCarts3 = false
-                                              : showCarts4 = false;
+                                              ? h.length == 1
+                                                  ? showCarts3 = !showCarts3
+                                                  : null
+                                              : turn == "4"
+                                                  ? h.length == 1
+                                                      ? showCarts4 = !showCarts4
+                                                      : null
+                                                  : null;
                                 } else {
                                   customAlertDialoge(context, "Sorry",
                                       "Card is already selected", "ok");
@@ -2497,6 +2559,7 @@ class _EditSituationState extends State<EditSituation> {
           ),
           Expanded(
             child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: counting.length,
@@ -2511,9 +2574,13 @@ class _EditSituationState extends State<EditSituation> {
                                 (value) => value["title"] == counting[index]);
                             final exists2 = total.where((value) =>
                                 value["image"] == "assets/pngegg (2).png");
+                            final exists3 = total.where(
+                                (value) => value["check"] == check3[index]);
                             setState(() {
                               if (h.length < length) {
-                                if (exists.isEmpty || exists2.isEmpty) {
+                                if (exists.isEmpty ||
+                                    exists2.isEmpty ||
+                                    exists3.isEmpty) {
                                   h.add({
                                     "title": counting[index],
                                     "image": "assets/pngegg (2).png",
@@ -2522,15 +2589,26 @@ class _EditSituationState extends State<EditSituation> {
                                   total.add({
                                     "title": counting[index],
                                     "image": "assets/pngegg (2).png",
-                                    "color": Colors.red.value,
+                                    "color": Colors.black.value,
+                                    "check": check3[index],
                                   });
                                   turn == "1"
-                                      ? showCarts1 = false
+                                      ? h.length == 2
+                                          ? showCarts1 = !showCarts1
+                                          : null
                                       : turn == "2"
-                                          ? showCarts2 = false
+                                          ? h.length == 3
+                                              ? showCarts2 = !showCarts2
+                                              : null
                                           : turn == "3"
-                                              ? showCarts3 = false
-                                              : showCarts4 = false;
+                                              ? h.length == 1
+                                                  ? showCarts3 = !showCarts3
+                                                  : null
+                                              : turn == "4"
+                                                  ? h.length == 1
+                                                      ? showCarts4 = !showCarts4
+                                                      : null
+                                                  : null;
                                 } else {
                                   customAlertDialoge(context, "Sorry",
                                       "Card is already selected", "ok");
@@ -2580,6 +2658,7 @@ class _EditSituationState extends State<EditSituation> {
           ),
           Expanded(
             child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: counting.length,
@@ -2594,9 +2673,13 @@ class _EditSituationState extends State<EditSituation> {
                                 (value) => value["title"] == counting[index]);
                             final exists2 = total.where((value) =>
                                 value["image"] == "assets/pngegg (3).png");
+                            final exists3 = total.where(
+                                (value) => value["check"] == check4[index]);
                             setState(() {
                               if (h.length < length) {
-                                if (exists.isEmpty || exists2.isEmpty) {
+                                if (exists.isEmpty ||
+                                    exists2.isEmpty ||
+                                    exists3.isEmpty) {
                                   h.add({
                                     "title": counting[index],
                                     "image": "assets/pngegg (3).png",
@@ -2605,15 +2688,26 @@ class _EditSituationState extends State<EditSituation> {
                                   total.add({
                                     "title": counting[index],
                                     "image": "assets/pngegg (3).png",
-                                    "color": Colors.red.value,
+                                    "color": Colors.black.value,
+                                    "check": check4[index],
                                   });
                                   turn == "1"
-                                      ? showCarts1 = false
+                                      ? h.length == 2
+                                          ? showCarts1 = !showCarts1
+                                          : null
                                       : turn == "2"
-                                          ? showCarts2 = false
+                                          ? h.length == 3
+                                              ? showCarts2 = !showCarts2
+                                              : null
                                           : turn == "3"
-                                              ? showCarts3 = false
-                                              : showCarts4 = false;
+                                              ? h.length == 1
+                                                  ? showCarts3 = !showCarts3
+                                                  : null
+                                              : turn == "4"
+                                                  ? h.length == 1
+                                                      ? showCarts4 = !showCarts4
+                                                      : null
+                                                  : null;
                                 } else {
                                   customAlertDialoge(context, "Sorry",
                                       "Card is already selected", "ok");
